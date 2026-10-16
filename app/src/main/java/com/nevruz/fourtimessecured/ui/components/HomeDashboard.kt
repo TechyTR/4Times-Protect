@@ -206,17 +206,17 @@ fun HomeDashboard(
             }
 
             item {
-                AdvancedAccessCard(
-                    shizukuManager = shizukuManager
-                )
-            }
-
-            item {
                 Text(
                     "GÜVENLİK MERKEZİ",
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            item {
+                AdvancedAccessCard(
+                    shizukuManager = shizukuManager
                 )
             }
 
