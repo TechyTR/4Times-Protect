@@ -42,6 +42,7 @@ import com.zenithguard.security.FileScanner
 import com.zenithguard.security.MalwareHashDatabase
 import com.zenithguard.security.ScanResult
 import com.zenithguard.security.ScanStatus
+import com.zenithguard.security.ScanHistoryStore
 import com.zenithguard.security.SelectedDocumentDeleteManager
 import com.zenithguard.security.DeleteDocumentResult
 import kotlinx.coroutines.CancellationException
@@ -84,6 +85,7 @@ fun QuickScanFlow(
                         FileScanner.scanSelectedDocument(context, uri, MalwareHashDatabase.snapshot())
                     }
                     result = scan
+                    ScanHistoryStore(context).add(scan)
                     resultFindings = FileRiskAnalyzer.analyze(scan.name, scan.sha256)
                     val knownBad = scan.status == ScanStatus.KNOWN_MALWARE ||
                         resultFindings.any { it.level == FileRiskLevel.HIGH }
@@ -131,7 +133,7 @@ fun QuickScanFlow(
                 tonalElevation = 2.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text("⌁", fontSize = 32.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text("🧹", fontSize = 28.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
             }
         }
