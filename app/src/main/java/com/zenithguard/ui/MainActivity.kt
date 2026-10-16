@@ -29,6 +29,7 @@ import com.zenithguard.ui.components.HeaderBanner
 import com.zenithguard.ui.components.ModuleToggleCard
 import com.zenithguard.ui.components.PrivacyAuditCard
 import com.zenithguard.ui.components.ShizukuCard
+import com.zenithguard.ui.components.SecurityToolsPanel
 import com.zenithguard.ui.theme.ZenithGuardTheme
 import com.zenithguard.ui.theme.ZenithThemeMode
 
@@ -151,6 +152,8 @@ fun DashboardScreen(
                 }
 
                 item { PrivacyAuditCard() }
+
+                item { SecurityToolsPanel() }
 
                 items(items = modules, key = { it.id }) { module ->
                     ModuleToggleCard(
