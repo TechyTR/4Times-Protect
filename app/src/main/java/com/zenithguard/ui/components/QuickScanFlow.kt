@@ -119,7 +119,7 @@ fun QuickScanFlow(
             Column(modifier = Modifier.weight(1f)) {
                 Text("Hemen tara", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 Text(
-                    if (enabled) "Bir dosyayı seçip güvenlik kontrolünü başlat." else "Dosya taraması ayarlardan kapalı.",
+                    if (enabled) "Taramayı başlatmak için süpürgeye dokun." else "Dosya taraması ayarlardan kapalı.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -136,13 +136,6 @@ fun QuickScanFlow(
                     Text("🧹", fontSize = 28.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
             }
-        }
-        Button(
-            onClick = { if (enabled && !scanning) picker.launch(arrayOf("*/*")) },
-            enabled = enabled && !scanning,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Dosya seç ve tara")
         }
         if (!enabled) {
             Text("Bu özellik Ayarlar → Güvenlik bölümünden açılabilir.", style = MaterialTheme.typography.bodySmall)
