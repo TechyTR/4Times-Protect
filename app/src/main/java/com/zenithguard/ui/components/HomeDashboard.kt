@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
@@ -36,10 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
-import com.zenithguard.core.ProtectionEngine
-import com.zenithguard.core.ShizukuManager
-import com.zenithguard.security.ScanHistoryStore
-import com.zenithguard.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.core.ProtectionEngine
+import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.security.ScanHistoryStore
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 @Composable
 fun HomeDashboard(
