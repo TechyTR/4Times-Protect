@@ -1,9 +1,11 @@
 package com.zenithguard.ui.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,39 +19,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zenithguard.ui.theme.LocalZenithThemeMode
+import com.zenithguard.ui.theme.ZenithThemeMode
 import com.zenithguard.ui.theme.rememberAnimatedOSGradient
 
 @Composable
 fun HeaderBanner() {
     val animatedGradient = rememberAnimatedOSGradient()
+    val themeMode = LocalZenithThemeMode.current
+    val cornerSize = if (themeMode == ZenithThemeMode.WINDOWS_XP) 6.dp else 28.dp
+    val shape = RoundedCornerShape(cornerSize)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(28.dp))
+            .animateContentSize()
+            .shadow(if (themeMode == ZenithThemeMode.WINDOWS_XP) 2.dp else 14.dp, shape)
+            .clip(shape)
             .background(animatedGradient)
             .border(
                 width = 1.dp,
                 brush = Brush.verticalGradient(
-                    colors = listOf(Color.White.copy(alpha = 0.35f), Color.White.copy(alpha = 0.05f))
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.36f),
+                        Color.White.copy(alpha = 0.06f)
+                    )
                 ),
-                shape = RoundedCornerShape(28.dp)
+                shape = shape
             )
-            .shadow(16.dp, RoundedCornerShape(28.dp))
-            .padding(20.dp),
+            .padding(22.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Surface(
-                color = Color.White.copy(alpha = 0.15f),
-                shape = RoundedCornerShape(50)
+                color = Color.White.copy(alpha = 0.16f),
+                shape = RoundedCornerShape(if (themeMode == ZenithThemeMode.WINDOWS_XP) 3.dp else 50)
             ) {
                 Text(
                     text = "SİSTEM GÜVENLİ VE GÜNCEL",
                     color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 1.5.sp,
+                    letterSpacing = 1.4.sp,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
             }
@@ -58,7 +69,7 @@ fun HeaderBanner() {
 
             Text(
                 text = "Zenith Version",
-                color = Color.White.copy(alpha = 0.85f),
+                color = Color.White.copy(alpha = 0.88f),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -74,7 +85,7 @@ fun HeaderBanner() {
 
             Text(
                 text = "Zenith Guard Core • Build #1",
-                color = Color.White.copy(alpha = 0.7f),
+                color = Color.White.copy(alpha = 0.78f),
                 fontSize = 12.sp
             )
         }
