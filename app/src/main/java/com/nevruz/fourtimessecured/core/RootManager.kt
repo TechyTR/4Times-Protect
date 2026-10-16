@@ -2,78 +2,145 @@ package com.nevruz.fourtimessecured.core
 
 import android.util.Log
 import java.io.BufferedReader
-import java.io.DataOutputStream
 import java.io.InputStreamReader
+import java.util.concurrent.TimeUnit
+
+enum class RootStatus {
+    GRANTED,
+    DENIED,
+    UNAVAILABLE,
+    TIMEOUT,
+    ERROR
+}
+
+data class RootCheckResult(
+    val status: RootStatus,
+    val uid: Int? = null,
+    val message: String
+) {
+    val isGranted: Boolean
+        get() = status == RootStatus.GRANTED
+}
 
 class RootManager {
 
     companion object {
-        private const val TAG = "ZenithGuard-Root"
+        private const val TAG = "FourTimesRoot"
+        private const val TIMEOUT_SECONDS = 4L
+    }
+
+    /**
+     * Root yöneticisine su üzerinden erişim ister.
+     * Root yöneticisi varsa cihazda izin penceresi görünebilir.
+     */
+    fun checkRootAccess(): RootCheckResult {
+        var process: Process? = null
+
+        return try {
+            process = Runtime.getRuntime().exec(
+                arrayOf("su", "-c", "id")
+            )
+
+            val finished = process.waitFor(
+                TIMEOUT_SECONDS,
+                TimeUnit.SECONDS
+            )
+
+            if (!finished) {
+                process.destroyForcibly()
+                return RootCheckResult(
+                    RootStatus.TIMEOUT,
+                    message = "Root yanıt vermedi veya istek zaman aşımına uğradı."
+                )
+            }
+
+            val output = process.inputStream
+                .bufferedReader()
+                .use(BufferedReader::readText)
+                .trim()
+
+            val errorOutput = process.errorStream
+                .bufferedReader()
+                .use(BufferedReader::readText)
+                .trim()
+
+            if (process.exitValue() != 0) {
+                return RootCheckResult(
+                    RootStatus.DENIED,
+                    message = errorOutput.ifBlank {
+                        "Root izni verilmedi veya SU kullanılamıyor."
+                    }
+                )
+            }
+
+            val uid = Regex("""\buid=(\d+)""")
+                .find(output)
+                ?.groupValues
+                ?.getOrNull(1)
+                ?.toIntOrNull()
+
+            if (uid == 0) {
+                RootCheckResult(
+                    RootStatus.GRANTED,
+                    uid = 0,
+                    message = "Root erişimi doğrulandı."
+                )
+            } else {
+                RootCheckResult(
+                    RootStatus.DENIED,
+                    uid = uid,
+                    message = "Komut root UID'siyle çalışmadı."
+                )
+            }
+        } catch (e: java.io.IOException) {
+            Log.i(TAG, "SU erişimi kullanılamıyor", e)
+            RootCheckResult(
+                RootStatus.UNAVAILABLE,
+                message = "SU bulunamadı veya çalıştırılamadı."
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "Root kontrolü başarısız", e)
+            RootCheckResult(
+                RootStatus.ERROR,
+                message = "Root kontrolü tamamlanamadı."
+            )
+        } finally {
+            try {
+                process?.inputStream?.close()
+                process?.errorStream?.close()
+                process?.outputStream?.close()
+            } catch (_: Exception) {
+                // Temizleme sırasında oluşan hatalar yok sayılır.
+            }
+        }
     }
 
     fun isRootAvailable(): Boolean {
         return try {
-            val process = Runtime.getRuntime().exec(arrayOf("which", "su"))
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val line = reader.readLine()
-            process.waitFor()
-            line != null
-        } catch (e: Exception) {
-            false
-        }
-    }
+            val process = Runtime.getRuntime().exec(
+                arrayOf("sh", "-c", "command -v su")
+            )
 
-    fun hasRootPermission(): Boolean {
-        return try {
-            val process = Runtime.getRuntime().exec("su -c id")
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val line = reader.readLine()
-            process.waitFor()
-            line != null && line.contains("uid=0(root)")
-        } catch (e: Exception) {
-            false
-        }
-    }
+            val finished = process.waitFor(
+                2,
+                TimeUnit.SECONDS
+            )
 
-    fun executeRootCommand(command: String): String {
-        if (!hasRootPermission()) {
-            return "ERROR: Root permission denied or unavailable."
-        }
-        return try {
-            val process = Runtime.getRuntime().exec("su")
-            val outputStream = DataOutputStream(process.outputStream)
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-
-            outputStream.writeBytes("$command\n")
-            outputStream.writeBytes("exit\n")
-            outputStream.flush()
-
-            val output = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                output.append(line).append("\n")
+            if (!finished) {
+                process.destroyForcibly()
+                false
+            } else {
+                process.exitValue() == 0 &&
+                    process.inputStream
+                        .bufferedReader()
+                        .use { it.readText() }
+                        .isNotBlank()
             }
-
-            process.waitFor()
-            output.toString().trim()
-        } catch (e: Exception) {
-            Log.e(TAG, "Root command execution failed: ${e.localizedMessage}")
-            "ERROR: ${e.localizedMessage}"
+        } catch (_: Exception) {
+            false
         }
     }
 
-    fun forceStopAppRoot(packageName: String): Boolean {
-        val result = executeRootCommand("am force-stop $packageName")
-        return !result.contains("ERROR")
-    }
-
-    fun freezePackageRoot(packageName: String): Boolean {
-        val result = executeRootCommand("pm disable-user --user 0 $packageName")
-        return result.contains("disabled-user") || result.contains("new state: disabled-user")
-    }
-
-    fun killProcessRoot(pid: Int): Boolean {
-        val result = executeRootCommand("kill -9 $pid")
-        return !result.contains("ERROR")
-    }
+    fun hasRootPermission(): Boolean =
+        checkRootAccess().isGranted
 }
