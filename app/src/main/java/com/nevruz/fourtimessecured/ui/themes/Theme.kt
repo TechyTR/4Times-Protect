@@ -19,7 +19,7 @@ enum class ZenithThemeMode(val title: String, val description: String) {
     SYSTEM("Sistem", "Telefonun açık/koyu modunu takip eder"),
     LIGHT("Aydınlık", "Temiz, açık yüzeyler ve zümrüt vurgular"),
     DARK("Karanlık", "Grafit yüzeyler ve zümrüt vurgular"),
-    LIQUID_GLASS("Liquid Glass", "Cam hissi veren yarı saydam katmanlar"),
+    LIQUID_GLASS("Liquid Glass", "Işığı yansıtan, katmanlı cam yüzeyler"),
     MATERIAL_YOU("Material You", "Yumuşak Android yüzeyleri ve Google Sans"),
     AURORA("Aurora", "Kuzey ışıklarından ilham alan mor ve turkuaz tonlar");
 
