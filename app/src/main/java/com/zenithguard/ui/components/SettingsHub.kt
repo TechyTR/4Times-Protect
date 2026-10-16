@@ -41,6 +41,7 @@ import com.zenithguard.core.ProtectionEngine
 import com.zenithguard.core.ShizukuManager
 import com.zenithguard.ui.theme.ZenithThemeMode
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
@@ -217,6 +218,17 @@ fun SettingsHub(
                                         } else {
                                             val launch = context.packageManager.getLaunchIntentForPackage("moe.shizuku.privileged.api")
                                             if (launch != null) context.startActivity(launch)
+                                        }
+                                        scope.launch {
+                                            repeat(30) {
+                                                delay(500)
+                                                shizukuAvailable = shizukuManager.isShizukuAvailable()
+                                                shizukuGranted = shizukuManager.hasShizukuPermission()
+                                                if (shizukuGranted) {
+                                                    onSettingsChanged()
+                                                    return@launch
+                                                }
+                                            }
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth()
