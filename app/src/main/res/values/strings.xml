@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- DOSYA KONUMU: app/src/main/res/values/strings.xml -->
 <resources>
-<string name="app_name">Zenith Guard</string>
+    <string name="app_name">4Times Protect</string>
 </resources>
