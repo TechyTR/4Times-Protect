@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,15 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
-import com.zenithguard.security.FileRiskAnalyzer
-import com.zenithguard.security.FileRiskLevel
-import com.zenithguard.security.FileScanner
-import com.zenithguard.security.MalwareHashDatabase
-import com.zenithguard.security.ScanResult
-import com.zenithguard.security.ScanStatus
-import com.zenithguard.security.ScanHistoryStore
-import com.zenithguard.security.SelectedDocumentDeleteManager
-import com.zenithguard.security.DeleteDocumentResult
+import com.nevruz.fourtimessecured.security.FileRiskAnalyzer
+import com.nevruz.fourtimessecured.security.FileRiskLevel
+import com.nevruz.fourtimessecured.security.FileScanner
+import com.nevruz.fourtimessecured.security.MalwareHashDatabase
+import com.nevruz.fourtimessecured.security.ScanResult
+import com.nevruz.fourtimessecured.security.ScanStatus
+import com.nevruz.fourtimessecured.security.ScanHistoryStore
+import com.nevruz.fourtimessecured.security.SelectedDocumentDeleteManager
+import com.nevruz.fourtimessecured.security.DeleteDocumentResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -63,7 +63,7 @@ fun QuickScanFlow(
     var scanning by remember { mutableStateOf(false) }
     var showResult by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf<ScanResult?>(null) }
-    var resultFindings by remember { mutableStateOf(emptyList<com.zenithguard.security.FileRiskFinding>()) }
+    var resultFindings by remember { mutableStateOf(emptyList<com.nevruz.fourtimessecured.security.FileRiskFinding>()) }
     var message by remember { mutableStateOf<String?>(null) }
     var scanJob by remember { mutableStateOf<Job?>(null) }
 
