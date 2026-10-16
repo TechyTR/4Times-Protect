@@ -6,6 +6,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,13 +34,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import com.nevruz.fourtimessecured.core.ProtectionEngine
 import com.nevruz.fourtimessecured.core.ShizukuManager
-import com.nevruz.fourtimessecured.security.ScanHistoryStore
 import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 @Composable
@@ -75,7 +77,15 @@ fun HomeDashboard(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = when (themeMode) {
+                        ZenithThemeMode.AURORA -> listOf(Color(0xFF10152C), Color(0xFF080C1B), Color(0xFF101E29))
+                        ZenithThemeMode.LIQUID_GLASS -> listOf(Color(0xFF102B3D), Color(0xFF07121D), Color(0xFF152338))
+                        else -> listOf(MaterialTheme.colorScheme.background, MaterialTheme.colorScheme.background)
+                    }
+                )
+            )
             .padding(horizontal = 16.dp)
     ) {
         Row(
@@ -97,7 +107,7 @@ fun HomeDashboard(
                 )
             }
             TextButton(onClick = { settingsVisible = true }) {
-                Text("⚙  Ayarlar", fontWeight = FontWeight.SemiBold)
+                Text("Ayarlar", fontWeight = FontWeight.SemiBold)
             }
         }
 
@@ -108,12 +118,31 @@ fun HomeDashboard(
         ) {
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.55f),
+                            shape = RoundedCornerShape(28.dp)
+                        ),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    elevation = CardDefaults.cardElevation(defaultElevation = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 5.dp)
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth().padding(18.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        MaterialTheme.colorScheme.primary.copy(alpha = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.28f else 0.13f),
+                                        MaterialTheme.colorScheme.surface.copy(alpha = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.78f else 1f),
+                                        MaterialTheme.colorScheme.secondary.copy(alpha = if (themeMode == ZenithThemeMode.AURORA) 0.17f else 0.08f)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(28.dp)
+                            )
+                            .padding(18.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
