@@ -9,7 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import com.nevruz.fourtimessecured.R
 
 enum class ZenithThemeMode(val title: String, val description: String) {
     DARK("Zenith Dark", "Grafit yüzeyler ve zümrüt vurgular"),
@@ -34,18 +37,24 @@ val AccentPurple = Color(0xFF8B7CFF)
 val StatusGreen = Color(0xFF34D399)
 val StatusWarning = Color(0xFFFBBF24)
 
+private val GoogleSansFlex = FontFamily(
+    Font(R.font.google_sans_flex_regular, FontWeight.Normal),
+    Font(R.font.google_sans_flex_medium, FontWeight.Medium),
+    Font(R.font.google_sans_flex_bold, FontWeight.Bold)
+)
+
 /**
- * Uses the requested typeface when the Android device has it installed.
- * Android falls back to its default sans-serif when a named font is unavailable.
+ * Google Sans Flex is bundled under the SIL Open Font License.
+ * SF Pro is not bundled because Apple's current guidance says not to ship it
+ * inside apps; Liquid Glass uses Android's standard sans-serif instead.
+ * SamsungOne is requested for Samsung-style themes and gracefully falls back
+ * to Android's default sans-serif on devices where it is unavailable.
  */
-private fun fontForTheme(themeMode: ZenithThemeMode): FontFamily {
-    val familyName = when (themeMode) {
-        ZenithThemeMode.MATERIAL_YOU -> "Google Sans Flex"
-        ZenithThemeMode.LIQUID_GLASS -> "SF Pro Display"
-        ZenithThemeMode.DARK,
-        ZenithThemeMode.WINDOWS_XP -> "SamsungOne"
-    }
-    return FontFamily(Typeface.create(familyName, Typeface.NORMAL))
+private fun fontForTheme(themeMode: ZenithThemeMode): FontFamily = when (themeMode) {
+    ZenithThemeMode.MATERIAL_YOU -> GoogleSansFlex
+    ZenithThemeMode.LIQUID_GLASS -> FontFamily(Typeface.create("sans-serif", Typeface.NORMAL))
+    ZenithThemeMode.DARK,
+    ZenithThemeMode.WINDOWS_XP -> FontFamily(Typeface.create("SamsungOne", Typeface.NORMAL))
 }
 
 @Composable
