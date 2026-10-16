@@ -5,7 +5,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +37,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -111,30 +123,52 @@ fun QuickScanFlow(
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    val scanPulse = rememberInfiniteTransition(label = "scan-button-pulse")
+    val scanScale by scanPulse.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.045f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1350, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "scan-button-scale"
+    )
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text("Hemen tara", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text("Hızlı tarama", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(
-                    if (enabled) "Taramayı başlatmak için süpürgeye dokun." else "Dosya taraması ayarlardan kapalı.",
+                    if (enabled) "Bir dosya seç, güvenlik göstergelerini kontrol edelim." else "Dosya taraması ayarlardan kapalı.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Surface(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier
+                    .size(68.dp)
+                    .graphicsLayer {
+                        val scale = if (enabled && !scanning) scanScale else 1f
+                        scaleX = scale
+                        scaleY = scale
+                    },
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.primaryContainer,
                 onClick = { if (enabled && !scanning) picker.launch(arrayOf("*/*")) },
                 enabled = enabled && !scanning,
-                tonalElevation = 2.dp
+                tonalElevation = 4.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text("🧹", fontSize = 28.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Canvas(modifier = Modifier.size(34.dp)) {
+                        drawShieldScanIcon(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            strokeWidth = 2.4.dp.toPx()
+                        )
+                    }
                 }
             }
         }
@@ -241,4 +275,32 @@ fun QuickScanFlow(
             confirmButton = { TextButton(onClick = { message = null }) { Text("Tamam") } }
         )
     }
+}
+
+
+private fun DrawScope.drawShieldScanIcon(color: androidx.compose.ui.graphics.Color, strokeWidth: Float) {
+    val shield = Path().apply {
+        moveTo(size.width * 0.5f, size.height * 0.07f)
+        lineTo(size.width * 0.82f, size.height * 0.20f)
+        lineTo(size.width * 0.78f, size.height * 0.57f)
+        quadraticTo(size.width * 0.72f, size.height * 0.82f, size.width * 0.5f, size.height * 0.94f)
+        quadraticTo(size.width * 0.28f, size.height * 0.82f, size.width * 0.22f, size.height * 0.57f)
+        lineTo(size.width * 0.18f, size.height * 0.20f)
+        close()
+    }
+    drawPath(shield, color = color, style = Stroke(width = strokeWidth, cap = StrokeCap.Round))
+    drawLine(
+        color = color,
+        start = Offset(size.width * 0.34f, size.height * 0.51f),
+        end = Offset(size.width * 0.46f, size.height * 0.63f),
+        strokeWidth = strokeWidth,
+        cap = StrokeCap.Round
+    )
+    drawLine(
+        color = color,
+        start = Offset(size.width * 0.46f, size.height * 0.63f),
+        end = Offset(size.width * 0.68f, size.height * 0.38f),
+        strokeWidth = strokeWidth,
+        cap = StrokeCap.Round
+    )
 }
