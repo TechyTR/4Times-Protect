@@ -1,11 +1,11 @@
-package com.zenithguard.receiver
+package com.nevruz.fourtimessecured.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.zenithguard.core.ProtectionEngine
-import com.zenithguard.core.ShizukuManager
+import com.nevruz.fourtimessecured.core.ProtectionEngine
+import com.nevruz.fourtimessecured.core.ShizukuManager
 
 class ScreenStateReceiver : BroadcastReceiver() {
 
