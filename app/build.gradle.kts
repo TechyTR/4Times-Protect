@@ -77,6 +77,7 @@ dependencies {
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation("dev.rikka.shizuku:api:13.1.5")
     implementation("dev.rikka.shizuku:provider:13.1.5")
