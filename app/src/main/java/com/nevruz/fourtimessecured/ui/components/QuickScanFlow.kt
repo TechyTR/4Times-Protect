@@ -163,9 +163,10 @@ fun QuickScanFlow(
                 tonalElevation = 4.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
+                    val scanIconColor = MaterialTheme.colorScheme.onPrimaryContainer
                     Canvas(modifier = Modifier.size(34.dp)) {
                         drawShieldScanIcon(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = scanIconColor,
                             strokeWidth = 2.4.dp.toPx()
                         )
                     }
@@ -283,8 +284,8 @@ private fun DrawScope.drawShieldScanIcon(color: androidx.compose.ui.graphics.Col
         moveTo(size.width * 0.5f, size.height * 0.07f)
         lineTo(size.width * 0.82f, size.height * 0.20f)
         lineTo(size.width * 0.78f, size.height * 0.57f)
-        quadraticTo(size.width * 0.72f, size.height * 0.82f, size.width * 0.5f, size.height * 0.94f)
-        quadraticTo(size.width * 0.28f, size.height * 0.82f, size.width * 0.22f, size.height * 0.57f)
+        cubicTo(size.width * 0.76f, size.height * 0.78f, size.width * 0.64f, size.height * 0.94f, size.width * 0.5f, size.height * 0.94f)
+        cubicTo(size.width * 0.36f, size.height * 0.94f, size.width * 0.24f, size.height * 0.78f, size.width * 0.22f, size.height * 0.57f)
         lineTo(size.width * 0.18f, size.height * 0.20f)
         close()
     }
