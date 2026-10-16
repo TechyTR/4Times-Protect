@@ -22,7 +22,7 @@ class AdvancedAccessRepository(
         return AdvancedAccessStatus(
             shizukuAvailable = shizukuAvailable,
             shizukuPermissionGranted = shizukuGranted,
-            rootStatus = RootStatus.UNAVAILABLE,
+            rootStatus = RootStatus.NOT_CHECKED,
             level = if (shizukuGranted) {
                 AccessLevel.SHIZUKU_GRANTED
             } else {
