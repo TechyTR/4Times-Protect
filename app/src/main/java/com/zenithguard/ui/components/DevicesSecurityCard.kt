@@ -1,5 +1,5 @@
 
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.zenithguard.security.DeviceSecurityStatusChecker
-import com.zenithguard.security.SecurityPostureItem
+import com.nevruz.fourtimessecured.security.DeviceSecurityStatusChecker
+import com.nevruz.fourtimessecured.security.SecurityPostureItem
 
 @Composable
 fun DeviceSecurityCard() {
