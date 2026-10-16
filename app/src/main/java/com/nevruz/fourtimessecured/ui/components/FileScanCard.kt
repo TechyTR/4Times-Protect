@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -26,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.work.*
 import com.nevruz.fourtimessecured.security.*
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -126,19 +126,15 @@ fun FileScanCard() {
         }
     }
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize()
-    ) {
+    ProtectCard(modifier = Modifier.animateContentSize()) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text("Dosya Güvenlik Taraması", style = MaterialTheme.typography.titleMedium)
 
             Text(
-                "Android dosya seçicisinden bir dosya seç. Zenith Guard dosyanın SHA-256 özetini hesaplar ve mevcut imza listesiyle karşılaştırır.",
+                "Android dosya seçicisinden bir dosya seç. 4Times Protect dosyanın SHA-256 özetini hesaplar ve mevcut imza listesiyle karşılaştırır.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

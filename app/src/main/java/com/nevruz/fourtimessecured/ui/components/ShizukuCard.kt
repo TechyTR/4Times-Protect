@@ -17,10 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nevruz.fourtimessecured.core.ShizukuManager
-import com.nevruz.fourtimessecured.ui.theme.LocalZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import com.nevruz.fourtimessecured.ui.theme.StatusGreen
 import com.nevruz.fourtimessecured.ui.theme.StatusWarning
-import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 @Composable
 fun ShizukuCard(
@@ -29,33 +28,8 @@ fun ShizukuCard(
     onRequestPermission: () -> Unit
 ) {
     val context = LocalContext.current
-    val mode = LocalZenithThemeMode.current
-    val corner = when (mode) {
-        ZenithThemeMode.LIQUID_GLASS -> 26.dp
-        ZenithThemeMode.MATERIAL_YOU -> 24.dp
-        ZenithThemeMode.AURORA -> 28.dp
-        ZenithThemeMode.SYSTEM,
-        ZenithThemeMode.LIGHT,
-        ZenithThemeMode.DARK -> 20.dp
-    }
-    val shape = RoundedCornerShape(corner)
-    val cardModifier = Modifier
-        .fillMaxWidth()
-        .animateContentSize()
-        .then(
-            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.AURORA) {
-                Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape)
-            } else Modifier
-        )
 
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = shape,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (mode == ZenithThemeMode.AURORA || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
-        ),
-        modifier = cardModifier
-    ) {
+    ProtectCard(modifier = Modifier.animateContentSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

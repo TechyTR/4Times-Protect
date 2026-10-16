@@ -140,38 +140,46 @@ fun QuickScanFlow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("Hızlı tarama", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(
-                    if (enabled) "Bir dosya seç, güvenlik göstergelerini kontrol edelim." else "Dosya taraması ayarlardan kapalı.",
+                    if (enabled) "Bir dosya seç, imza ve risk göstergelerini kontrol edelim." else "Dosya taraması ayarlardan kapalı.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Surface(
                 modifier = Modifier
-                    .size(68.dp)
+                    .size(72.dp)
                     .graphicsLayer {
                         val scale = if (enabled && !scanning) scanScale else 1f
                         scaleX = scale
                         scaleY = scale
                     },
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 onClick = { if (enabled && !scanning) picker.launch(arrayOf("*/*")) },
                 enabled = enabled && !scanning,
-                tonalElevation = 4.dp
+                tonalElevation = 6.dp,
+                shadowElevation = 8.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    val scanIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    val scanIconColor = MaterialTheme.colorScheme.onPrimary
                     Canvas(modifier = Modifier.size(34.dp)) {
                         drawShieldScanIcon(
                             color = scanIconColor,
-                            strokeWidth = 2.4.dp.toPx()
+                            strokeWidth = 2.6.dp.toPx()
                         )
                     }
                 }
             }
+        }
+        Button(
+            onClick = { if (enabled && !scanning) picker.launch(arrayOf("*/*")) },
+            enabled = enabled && !scanning,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (scanning) "Taranıyor…" else "Dosya seç ve tara", fontWeight = FontWeight.SemiBold)
         }
         if (!enabled) {
             Text("Bu özellik Ayarlar → Güvenlik bölümünden açılabilir.", style = MaterialTheme.typography.bodySmall)

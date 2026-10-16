@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -28,6 +27,7 @@ import com.nevruz.fourtimessecured.core.RootCheckResult
 import com.nevruz.fourtimessecured.core.RootManager
 import com.nevruz.fourtimessecured.core.RootStatus
 import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import com.nevruz.fourtimessecured.security.PackageMetadataReport
 import com.nevruz.fourtimessecured.security.PackageMetadataScanner
 import kotlinx.coroutines.launch
@@ -68,11 +68,11 @@ fun AdvancedAccessCard(
         accessStatus = repository.readStatus()
     }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    ProtectCard {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(

@@ -55,7 +55,7 @@ fun HeaderBanner() {
                 shape = RoundedCornerShape(50.dp)
             ) {
                 Text(
-                    text = "SİSTEM GÜVENLİ VE GÜNCEL",
+                    text = "4TIMES PROTECT",
                     color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -67,7 +67,7 @@ fun HeaderBanner() {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Zenith Version",
+                text = "Koruma çekirdeği",
                 color = Color.White.copy(alpha = 0.88f),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
@@ -83,7 +83,7 @@ fun HeaderBanner() {
             )
 
             Text(
-                text = "Zenith Guard Core • Build #1",
+                text = "4Times Protect Core • Build #1",
                 color = Color.White.copy(alpha = 0.78f),
                 fontSize = 12.sp
             )

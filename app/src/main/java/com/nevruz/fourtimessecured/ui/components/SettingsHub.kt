@@ -18,7 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Security
@@ -27,7 +28,6 @@ import androidx.compose.material.icons.filled.Hub
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -52,7 +52,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.nevruz.fourtimessecured.core.ProtectionEngine
 import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.previewSwatches
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -121,10 +123,19 @@ fun SettingsHub(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).heightIn(max = 720.dp).border(1.dp, if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0x6689B6C9) else MaterialTheme.colorScheme.outline.copy(alpha = 0.45f), RoundedCornerShape(30.dp)),
-            shape = RoundedCornerShape(30.dp),
-            color = if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0xE61A2B3B) else MaterialTheme.colorScheme.surface,
-            tonalElevation = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 6.dp
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
+                .heightIn(max = 740.dp)
+                .border(
+                    1.dp,
+                    if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0x6689B6C9)
+                    else MaterialTheme.colorScheme.outline.copy(alpha = 0.35f),
+                    RoundedCornerShape(32.dp)
+                ),
+            shape = RoundedCornerShape(32.dp),
+            color = if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0xF2162A3A) else MaterialTheme.colorScheme.background,
+            tonalElevation = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 8.dp
         ) {
             Column(
                 modifier = Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
@@ -134,7 +145,7 @@ fun SettingsHub(
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             when (section) {
-                                "theme" -> "UI Teması"
+                                "theme" -> "Arayüz teması"
                                 "security" -> "Güvenlik özellikleri"
                                 "privacy" -> "Gizlilik özellikleri"
                                 "shizuku" -> "Shizuku"
@@ -144,7 +155,11 @@ fun SettingsHub(
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
-                        Text("Zenith Guard kontrol merkezi", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "4Times Protect kontrol merkezi",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                     TextButton(onClick = { if (section == "menu") onDismiss() else section = "menu" }) {
                         Text(if (section == "menu") "Kapat" else "Geri")
@@ -171,14 +186,38 @@ fun SettingsHub(
                     }
                     "theme" -> {
                         ZenithThemeMode.values().forEach { theme ->
+                            val selected = themeMode == theme
                             Row(
-                                modifier = Modifier.fillMaxWidth().animateContentSize(tween(260)).background(if (themeMode == theme) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else Color.Transparent, RoundedCornerShape(18.dp)).border(if (themeMode == theme) 1.dp else 0.dp, if (themeMode == theme) MaterialTheme.colorScheme.primary.copy(alpha = 0.48f) else Color.Transparent, RoundedCornerShape(18.dp)).clickable { onThemeSelected(theme) }.padding(horizontal = 10.dp, vertical = 10.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize(tween(260))
+                                    .background(
+                                        if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surface.copy(alpha = 0.55f),
+                                        RoundedCornerShape(20.dp)
+                                    )
+                                    .border(
+                                        if (selected) 1.5.dp else 1.dp,
+                                        if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.55f) else MaterialTheme.colorScheme.outline.copy(alpha = 0.22f),
+                                        RoundedCornerShape(20.dp)
+                                    )
+                                    .clickable { onThemeSelected(theme) }
+                                    .padding(horizontal = 12.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                RadioButton(selected = themeMode == theme, onClick = { onThemeSelected(theme) })
+                                RadioButton(selected = selected, onClick = { onThemeSelected(theme) })
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(theme.title, fontWeight = FontWeight.SemiBold)
                                     Text(theme.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    theme.previewSwatches().forEach { swatch ->
+                                        Box(
+                                            modifier = Modifier
+                                                .size(14.dp)
+                                                .background(swatch, CircleShape)
+                                                .border(1.dp, Color.White.copy(alpha = 0.35f), CircleShape)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -210,7 +249,7 @@ fun SettingsHub(
                         }
                     }
                     "shizuku" -> {
-                        Card(modifier = Modifier.fillMaxWidth()) {
+                        ProtectCard {
                             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text("Shizuku", modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
@@ -250,7 +289,7 @@ fun SettingsHub(
                         }
                     }
                     "root" -> {
-                        Card(modifier = Modifier.fillMaxWidth()) {
+                        ProtectCard {
                             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text("SU / Root", modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
@@ -286,7 +325,7 @@ private fun SettingsMenuItem(
     statusOk: Boolean = false,
     onClick: () -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
+    ProtectCard(modifier = Modifier.clickable(onClick = onClick)) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -328,7 +367,7 @@ private fun FeatureSwitch(
     checked: Boolean,
     onChanged: (Boolean) -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    ProtectCard {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,

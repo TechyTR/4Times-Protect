@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.nevruz.fourtimessecured.security.AppPermissionAuditor
 import com.nevruz.fourtimessecured.security.AppPermissionReport
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,9 +31,9 @@ fun AppPermissionAuditToolCard() {
     var hasScanned by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    ProtectCard {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text("Uygulama İzin Denetimi", style = MaterialTheme.typography.titleMedium)

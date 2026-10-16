@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -18,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.nevruz.fourtimessecured.security.ScanHistoryEntry
 import com.nevruz.fourtimessecured.security.ScanHistoryStore
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
+import com.nevruz.fourtimessecured.ui.theme.StatusChip
 import java.text.DateFormat
 import java.util.Date
 
@@ -36,13 +37,9 @@ fun ScanHistoryCard() {
         refresh()
     }
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize()
-    ) {
+    ProtectCard(modifier = Modifier.animateContentSize()) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text("Tarama Geçmişi", style = MaterialTheme.typography.titleMedium)
@@ -74,11 +71,21 @@ fun ScanHistoryCard() {
                             .padding(vertical = 5.dp),
                         verticalArrangement = Arrangement.spacedBy(3.dp)
                     ) {
-                        Text(entry.name, style = MaterialTheme.typography.bodyMedium)
-                        Text(
-                            "Sonuç: ${entry.status}",
-                            style = MaterialTheme.typography.labelLarge
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                        ) {
+                            Text(entry.name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                            StatusChip(
+                                text = entry.status,
+                                color = when (entry.status.uppercase()) {
+                                    "CLEAN", "SAFE", "SCANNED" -> MaterialTheme.colorScheme.primary
+                                    "MALWARE", "DANGER", "KNOWN_MALWARE" -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.tertiary
+                                }
+                            )
+                        }
                         Text(
                             DateFormat.getDateTimeInstance().format(Date(entry.timestamp)),
                             style = MaterialTheme.typography.bodySmall,

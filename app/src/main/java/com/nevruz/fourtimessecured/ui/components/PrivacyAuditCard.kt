@@ -6,7 +6,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,8 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nevruz.fourtimessecured.core.AppRiskReport
 import com.nevruz.fourtimessecured.core.SecurityScanner
-import com.nevruz.fourtimessecured.ui.theme.LocalZenithThemeMode
-import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.ProtectCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,40 +36,14 @@ import kotlinx.coroutines.withContext
 fun PrivacyAuditCard() {
     val context = androidx.compose.ui.platform.LocalContext.current
     val scope = rememberCoroutineScope()
-    val mode = LocalZenithThemeMode.current
     var scanning by remember { mutableStateOf(false) }
     var scanned by remember { mutableStateOf(false) }
     var reports by remember { mutableStateOf<List<AppRiskReport>>(emptyList()) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    val corner = when (mode) {
-        ZenithThemeMode.LIQUID_GLASS -> 26.dp
-        ZenithThemeMode.MATERIAL_YOU -> 24.dp
-        ZenithThemeMode.AURORA -> 28.dp
-        ZenithThemeMode.SYSTEM,
-        ZenithThemeMode.LIGHT,
-        ZenithThemeMode.DARK -> 20.dp
-    }
-    val shape = RoundedCornerShape(corner)
-    val cardModifier = Modifier
-        .fillMaxWidth()
-        .animateContentSize()
-        .then(
-            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.AURORA) {
-                Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape)
-            } else Modifier
-        )
-
-    Card(
-        modifier = cardModifier,
-        shape = shape,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (mode == ZenithThemeMode.AURORA || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
-        ),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
+    ProtectCard(modifier = Modifier.animateContentSize()) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
