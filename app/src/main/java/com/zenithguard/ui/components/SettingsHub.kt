@@ -123,7 +123,7 @@ fun SettingsHub(
                                 "theme" -> "UI Teması"
                                 "security" -> "Güvenlik özellikleri"
                                 "privacy" -> "Gizlilik özellikleri"
-                                "shizuku" -> "Shizuku",
+                                "shizuku" -> "Shizuku"
                                 "root" -> "SU / Root yetkisi"
                                 else -> "Ayarlar"
                             },
