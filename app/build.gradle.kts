@@ -16,7 +16,6 @@ android {
         targetSdk = 34
         versionCode = envVersionCode
         versionName = envVersionName
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -73,6 +72,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation(libs.androidx.compose.material3)
 
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
     implementation("dev.rikka.shizuku:api:13.1.5")
     implementation("dev.rikka.shizuku:provider:13.1.5")
 }
