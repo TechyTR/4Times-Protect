@@ -2,6 +2,9 @@ package com.nevruz.fourtimessecured.ui.components
 
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -97,6 +100,10 @@ fun HomeDashboard(
             )
             .padding(horizontal = 16.dp)
     ) {
+        AnimatedVisibility(
+            visible = true,
+            enter = fadeIn(tween(500)) + slideInVertically(tween(500)) { it / 6 }
+        ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 8.dp).animateContentSize(tween(320)),
             verticalAlignment = Alignment.CenterVertically
@@ -130,6 +137,7 @@ fun HomeDashboard(
                 Spacer(modifier = Modifier.size(5.dp))
                 Text("Ayarlar", fontWeight = FontWeight.SemiBold)
             }
+        }
         }
 
         LazyColumn(
