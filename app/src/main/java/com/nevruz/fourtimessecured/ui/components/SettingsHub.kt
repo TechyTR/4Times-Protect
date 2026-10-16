@@ -15,6 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Hub
+import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -140,19 +147,19 @@ fun SettingsHub(
 
                 when (section) {
                     "menu" -> {
-                        SettingsMenuItem("UI Teması", "Aydınlık, karanlık ve alternatif arayüzler", "◐") { section = "theme" }
-                        SettingsMenuItem("Güvenlik", "Tarama ve cihaz koruma özelliklerini yönet", "◇") { section = "security" }
-                        SettingsMenuItem("Gizlilik", "Uygulama izinleri ve gizlilik denetimleri", "◎") { section = "privacy" }
+                        SettingsMenuItem("UI Teması", "Aydınlık, Karanlık ve alternatif arayüzler", "theme") { section = "theme" }
+                        SettingsMenuItem("Güvenlik", "Tarama ve cihaz koruma özelliklerini yönet", "security") { section = "security" }
+                        SettingsMenuItem("Gizlilik", "Uygulama izinleri ve gizlilik denetimleri", "privacy") { section = "privacy" }
                         SettingsMenuItem(
                             "Shizuku",
                             if (shizukuGranted) "İzin verildi" else if (shizukuAvailable) "Bağlı, izin bekleniyor" else "Bağlantı yok",
-                            if (shizukuGranted) "✓" else "›",
+                            "shizuku",
                             statusOk = shizukuGranted
                         ) { section = "shizuku" }
                         SettingsMenuItem(
                             "SU yetkisi",
                             rootStatus,
-                            if (rootStatus == "Root erişimi doğrulandı") "✓" else "›",
+                            "root",
                             statusOk = rootStatus == "Root erişimi doğrulandı"
                         ) { section = "root" }
                     }
@@ -285,7 +292,19 @@ private fun SettingsMenuItem(
                 color = if (statusOk) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
             ) {
                 androidx.compose.foundation.layout.Box(contentAlignment = Alignment.Center) {
-                    Text(glyph, fontWeight = FontWeight.Bold, color = if (statusOk) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondaryContainer)
+                    Icon(
+                        imageVector = when (glyph) {
+                            "theme" -> Icons.Default.Palette
+                            "security" -> Icons.Default.Security
+                            "privacy" -> Icons.Default.PrivacyTip
+                            "shizuku" -> Icons.Default.Hub
+                            "root" -> Icons.Default.Terminal
+                            else -> Icons.Default.Security
+                        },
+                        contentDescription = null,
+                        tint = if (statusOk) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(22.dp)
+                    )
                 }
             }
             Column(modifier = Modifier.weight(1f)) {
