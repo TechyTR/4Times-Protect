@@ -7,11 +7,11 @@ val envVersionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: 1
 val envVersionName = System.getenv("RELEASE_VERSION_NAME") ?: "1.0.0"
 
 android {
-    namespace = "com.zenithguard"
+    namespace = "com.nevruz.fourtimessecured"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.zenithguard"
+        applicationId = "com.nevruz.fourtimessecured"
         minSdk = 26
         targetSdk = 34
         versionCode = envVersionCode
