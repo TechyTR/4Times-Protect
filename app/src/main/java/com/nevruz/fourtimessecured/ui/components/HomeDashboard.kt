@@ -2,6 +2,7 @@ package com.nevruz.fourtimessecured.ui.components
 
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
@@ -97,7 +98,7 @@ fun HomeDashboard(
             .padding(horizontal = 16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 8.dp).animateContentSize(tween(320)),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
@@ -140,6 +141,7 @@ fun HomeDashboard(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .animateContentSize(tween(360))
                         .border(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.55f),
@@ -218,7 +220,12 @@ fun HomeDashboard(
             }
 
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth().animateContentSize(tween(360)),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = CardDefaults.cardColors(containerColor = if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0xA91A2B3B) else MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 3.dp)
+                ) {
                     Column(modifier = Modifier.padding(18.dp)) {
                         QuickScanFlow(
                             enabled = settings.getBoolean("feature_file_scan", true),
