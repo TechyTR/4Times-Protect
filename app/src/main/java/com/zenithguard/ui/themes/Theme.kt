@@ -4,6 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 enum class ZenithThemeMode(val title: String, val description: String) {
@@ -14,9 +16,11 @@ enum class ZenithThemeMode(val title: String, val description: String) {
 
     companion object {
         fun fromName(name: String?): ZenithThemeMode =
-            entries.firstOrNull { it.name == name } ?: DARK
+            values().firstOrNull { it.name == name } ?: DARK
     }
 }
+
+val LocalZenithThemeMode = staticCompositionLocalOf { ZenithThemeMode.DARK }
 
 val Emerald = Color(0xFF10B981)
 val EmeraldLight = Color(0xFF6EE7B7)
@@ -37,6 +41,7 @@ fun ZenithGuardTheme(
             primary = Emerald,
             onPrimary = Color(0xFF032018),
             secondary = EmeraldLight,
+            onSecondary = Color(0xFF073326),
             background = DarkBackground,
             onBackground = Color(0xFFE8F2ED),
             surface = CardSurface,
@@ -49,6 +54,7 @@ fun ZenithGuardTheme(
             primary = EmeraldLight,
             onPrimary = Color(0xFF06271C),
             secondary = Color(0xFF8ADBC1),
+            onSecondary = Color(0xFF06271C),
             background = Color(0xFF08111A),
             onBackground = Color(0xFFF0FBF7),
             surface = Color(0xB81D2A32),
@@ -61,6 +67,7 @@ fun ZenithGuardTheme(
             primary = Emerald,
             onPrimary = Color(0xFF002116),
             secondary = Color(0xFFB2DCCB),
+            onSecondary = Color(0xFF18382A),
             background = Color(0xFF101512),
             onBackground = Color(0xFFE2E9E2),
             surface = Color(0xFF191F1B),
@@ -73,6 +80,7 @@ fun ZenithGuardTheme(
             primary = Color(0xFF1769C2),
             onPrimary = Color.White,
             secondary = Color(0xFF2D8B57),
+            onSecondary = Color.White,
             background = Color(0xFFE8F0F8),
             onBackground = Color(0xFF182A3A),
             surface = Color(0xFFF8FBFF),
@@ -83,8 +91,10 @@ fun ZenithGuardTheme(
         )
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
+    CompositionLocalProvider(LocalZenithThemeMode provides themeMode) {
+        MaterialTheme(
+            colorScheme = colors,
+            content = content
+        )
+    }
 }
