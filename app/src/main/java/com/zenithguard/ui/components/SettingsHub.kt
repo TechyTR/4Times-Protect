@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import android.content.Context
 import android.content.Intent
@@ -37,9 +37,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.zenithguard.core.ProtectionEngine
-import com.zenithguard.core.ShizukuManager
-import com.zenithguard.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.core.ProtectionEngine
+import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
