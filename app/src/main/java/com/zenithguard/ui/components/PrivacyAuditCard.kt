@@ -1,5 +1,12 @@
 package com.zenithguard.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,29 +28,48 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zenithguard.core.AppRiskReport
 import com.zenithguard.core.SecurityScanner
+import com.zenithguard.ui.theme.LocalZenithThemeMode
+import com.zenithguard.ui.theme.ZenithThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
 fun PrivacyAuditCard() {
-    val context = LocalContext.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val scope = rememberCoroutineScope()
+    val mode = LocalZenithThemeMode.current
     var scanning by remember { mutableStateOf(false) }
     var scanned by remember { mutableStateOf(false) }
     var reports by remember { mutableStateOf<List<AppRiskReport>>(emptyList()) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+    val corner = when (mode) {
+        ZenithThemeMode.WINDOWS_XP -> 5.dp
+        ZenithThemeMode.LIQUID_GLASS -> 26.dp
+        ZenithThemeMode.MATERIAL_YOU -> 24.dp
+        ZenithThemeMode.DARK -> 20.dp
+    }
+    val shape = RoundedCornerShape(corner)
+    val cardModifier = Modifier
+        .fillMaxWidth()
+        .animateContentSize()
+        .then(
+            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.WINDOWS_XP) {
+                Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape)
+            } else Modifier
         )
+
+    Card(
+        modifier = cardModifier,
+        shape = shape,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (mode == ZenithThemeMode.WINDOWS_XP || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
+        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -50,8 +77,7 @@ fun PrivacyAuditCard() {
         ) {
             Text(
                 text = "Uygulama Gizlilik Denetimi",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = "Uygulamaların talep ettiği hassas izinleri tarar. Bu sonuçlar zararlı yazılım tespiti değildir; izin talepleri tek başına kötü niyet kanıtı sayılmaz.",
@@ -93,30 +119,43 @@ fun PrivacyAuditCard() {
                 }
             }
 
-            errorMessage?.let {
-                Text(it, color = MaterialTheme.colorScheme.error)
+            AnimatedVisibility(
+                visible = errorMessage != null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Text(
+                    text = errorMessage.orEmpty(),
+                    color = MaterialTheme.colorScheme.error
+                )
             }
 
-            if (scanned && errorMessage == null) {
-                Text(
-                    text = "${reports.size} uygulama risk göstergesiyle listelendi",
-                    style = MaterialTheme.typography.labelLarge
-                )
-                if (reports.isEmpty()) {
+            AnimatedVisibility(
+                visible = scanned && errorMessage == null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        "Bu taramada eşleşen bir izin göstergesi bulunmadı.",
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "${reports.size} uygulama risk göstergesiyle listelendi",
+                        style = MaterialTheme.typography.labelLarge
                     )
-                } else {
-                    reports.take(5).forEach { report ->
-                        AuditResultRow(report)
-                    }
-                    if (reports.size > 5) {
+                    if (reports.isEmpty()) {
                         Text(
-                            "En yüksek puanlı 5 sonuç gösteriliyor.",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            "Bu taramada eşleşen bir izin göstergesi bulunmadı.",
+                            style = MaterialTheme.typography.bodyMedium
                         )
+                    } else {
+                        reports.take(5).forEach { report ->
+                            AuditResultRow(report)
+                        }
+                        if (reports.size > 5) {
+                            Text(
+                                "En yüksek puanlı 5 sonuç gösteriliyor.",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
             }
@@ -134,7 +173,7 @@ private fun AuditResultRow(report: AppRiskReport) {
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(report.appName, fontWeight = FontWeight.Medium)
+                Text(report.appName, style = MaterialTheme.typography.bodyMedium)
                 Text(
                     report.packageName,
                     style = MaterialTheme.typography.labelSmall,
