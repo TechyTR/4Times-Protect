@@ -6,6 +6,16 @@ plugins {
 val envVersionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: 1
 val envVersionName = System.getenv("RELEASE_VERSION_NAME") ?: "1.0.0"
 
+// Use the repository-provided transparent PNG as the actual launcher icon.
+tasks.register<Copy>("prepareLauncherIcon") {
+    from(rootProject.file("assets/icon.png"))
+    into(layout.projectDirectory.dir("src/main/res/drawable-nodpi"))
+    rename { "zenith_guard_icon.png" }
+}
+tasks.named("preBuild").configure {
+    dependsOn("prepareLauncherIcon")
+}
+
 android {
     namespace = "com.nevruz.fourtimessecured"
     compileSdk = 34
