@@ -21,6 +21,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Icon
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -92,9 +100,19 @@ fun HomeDashboard(
             modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Surface(
+                modifier = Modifier.size(44.dp),
+                shape = RoundedCornerShape(15.dp),
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.Shield, contentDescription = "Zenith Guard", tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(27.dp))
+                }
+            }
+            Spacer(modifier = Modifier.size(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "ZENITH GUARD",
+                    "Zenith Guard",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
                     letterSpacing = 1.2.sp,
@@ -107,6 +125,8 @@ fun HomeDashboard(
                 )
             }
             TextButton(onClick = { settingsVisible = true }) {
+                Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.size(5.dp))
                 Text("Ayarlar", fontWeight = FontWeight.SemiBold)
             }
         }
@@ -173,17 +193,16 @@ fun HomeDashboard(
                                 color = statusColor.copy(alpha = 0.14f)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Text(
-                                        when (status) {
-                                            "SCANNING" -> "…"
-                                            "SCANNED" -> "✓"
-                                            "DANGER" -> "!"
-                                            "REVIEW" -> "?"
-                                            else -> "!"
+                                    Icon(
+                                        imageVector = when (status) {
+                                            "SCANNED" -> Icons.Default.CheckCircle
+                                            "DANGER", "REVIEW" -> Icons.Default.Warning
+                                            "SCANNING" -> Icons.Default.Security
+                                            else -> Icons.Default.Shield
                                         },
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Black,
-                                        color = statusColor
+                                        contentDescription = null,
+                                        tint = statusColor,
+                                        modifier = Modifier.size(28.dp)
                                     )
                                 }
                             }
@@ -235,12 +254,10 @@ fun HomeDashboard(
             }
 
             item {
-                Text(
-                    "GÜVENLİK MERKEZİ",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+                    Text("Güvenlik merkezi", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                }
             }
 
             item {
@@ -292,12 +309,20 @@ private fun SummaryTile(
     positive: Boolean
 ) {
     Card(modifier = modifier) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(value, fontWeight = FontWeight.Bold, color = if (positive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            Surface(modifier = Modifier.size(38.dp), shape = RoundedCornerShape(13.dp), color = if (positive) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(imageVector = if (title == "Shizuku") Icons.Default.Security else Icons.Default.Terminal, contentDescription = null, tint = if (positive) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(21.dp))
+                }
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(value, fontWeight = FontWeight.Bold, color = if (positive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            }
         }
     }
 }
