@@ -26,14 +26,14 @@ import com.nevruz.fourtimessecured.ui.theme.rememberAnimatedOSGradient
 fun HeaderBanner() {
     val animatedGradient = rememberAnimatedOSGradient()
     val themeMode = LocalZenithThemeMode.current
-    val cornerSize = if (themeMode == ZenithThemeMode.WINDOWS_XP) 6.dp else 28.dp
+    val cornerSize = if (themeMode == ZenithThemeMode.AURORA) 30.dp else 28.dp
     val shape = RoundedCornerShape(cornerSize)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
-            .shadow(if (themeMode == ZenithThemeMode.WINDOWS_XP) 2.dp else 14.dp, shape)
+            .shadow(if (themeMode == ZenithThemeMode.AURORA) 18.dp else 14.dp, shape)
             .clip(shape)
             .background(animatedGradient)
             .border(
@@ -52,7 +52,7 @@ fun HeaderBanner() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Surface(
                 color = Color.White.copy(alpha = 0.16f),
-                shape = RoundedCornerShape(if (themeMode == ZenithThemeMode.WINDOWS_XP) 3.dp else 50.dp)
+                shape = RoundedCornerShape(50.dp)
             ) {
                 Text(
                     text = "SİSTEM GÜVENLİ VE GÜNCEL",
