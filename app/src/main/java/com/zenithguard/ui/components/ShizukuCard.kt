@@ -16,9 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zenithguard.core.ShizukuManager
-import com.zenithguard.ui.theme.AccentCyan
-import com.zenithguard.ui.theme.AccentPurple
-import com.zenithguard.ui.theme.CardSurface
 import com.zenithguard.ui.theme.StatusGreen
 import com.zenithguard.ui.theme.StatusWarning
 
@@ -31,12 +28,15 @@ fun ShizukuCard(
     val context = LocalContext.current
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = CardSurface),
-        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -48,13 +48,13 @@ fun ShizukuCard(
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Shizuku ADB Süper Ayrıcalığı",
-                    color = Color.Gray,
+                    text = "Shizuku ADB Yetkisi",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 11.sp
                 )
                 Text(
-                    text = if (isShizukuActive) "Aktif (Derin Kilit ve AppOps Hazır)" else "Pasif (Standart Mod)",
-                    color = Color.White,
+                    text = if (isShizukuActive) "Aktif (Derin denetim kullanılabilir)" else "Pasif (Standart mod)",
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )
@@ -62,21 +62,31 @@ fun ShizukuCard(
             if (!isShizukuActive) {
                 Button(
                     onClick = onRequestPermission,
-                    colors = ButtonDefaults.buttonColors(containerColor = AccentCyan),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
                 ) {
-                    Text("Yetki Ver", color = Color.Black, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Yetki ver",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             } else {
                 Button(
                     onClick = {
                         shizukuManager.forceStopApp("com.facebook.katana")
-                        Toast.makeText(context, "Derin ADB Temizliği Yapıldı!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "İşlem gönderildi.", Toast.LENGTH_SHORT).show()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = AccentPurple),
-                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 7.dp)
                 ) {
-                    Text("Derin Temizle", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Derin temizle",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
