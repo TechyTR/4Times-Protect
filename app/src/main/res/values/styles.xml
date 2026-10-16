@@ -1,6 +1,19 @@
 <resources>
-<style name="Theme.ZenithGuard" parent="android:Theme.Material.NoActionBar">
-<item name="android:statusBarColor">@android:color/transparent</item>
-<item name="android:navigationBarColor">@android:color/transparent</item>
-</style>
+    <style name="Theme.ZenithGuard" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/ZenithWindowAnimation</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="ZenithWindowAnimation">
+        <item name="android:activityOpenEnterAnimation">@anim/zenith_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/zenith_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/zenith_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/zenith_close_exit</item>
+        <item name="android:taskOpenEnterAnimation">@anim/zenith_open_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/zenith_open_exit</item>
+        <item name="android:taskCloseEnterAnimation">@anim/zenith_close_enter</item>
+        <item name="android:taskCloseExitAnimation">@anim/zenith_close_exit</item>
+    </style>
 </resources>
