@@ -174,6 +174,7 @@ fun HomeDashboard(
                     Column(modifier = Modifier.padding(18.dp)) {
                         QuickScanFlow(
                             enabled = settings.getBoolean("feature_file_scan", true),
+                            saveHistory = settings.getBoolean("feature_scan_history", true),
                             onStatusChanged = { newStatus, detail ->
                                 status = newStatus
                                 statusDetail = detail
