@@ -56,15 +56,17 @@ val securityFeatures = listOf(
     ZenithFeature("feature_file_scan", "Dosya taraması", "Seçilen dosyaları bilinen imzalar ve risk göstergeleriyle kontrol eder."),
     ZenithFeature("feature_device_status", "Cihaz güvenlik durumu", "Ekran kilidi, geliştirici seçenekleri ve ADB durumunu gösterir."),
     ZenithFeature("feature_scan_history", "Tarama geçmişi", "Son tarama sonuçlarını cihazda yerel olarak saklar."),
-    ZenithFeature("feature_realtime_install", "Yeni uygulama denetimi", "Yeni kurulan uygulamalar için mevcut denetim altyapısını etkin tutar."),
-    ZenithFeature("feature_deep_audit", "Derin denetim (Shizuku)", "Shizuku izni varsa desteklenen sistem denetimlerini kullanır.", false)
+    ZenithFeature(ProtectionEngine.MODULE_REALTIME_INSTALL, "Yeni uygulama denetimi", "Yeni kurulan uygulamalar için mevcut denetim altyapısını etkin tutar."),
+    ZenithFeature(ProtectionEngine.MODULE_DEEP_APPOPS, "Derin gizlilik denetimi (Shizuku)", "Shizuku izni varsa desteklenen AppOps denetimlerini kullanır.", false),
+    ZenithFeature(ProtectionEngine.MODULE_FORCE_STOPPER, "Süreç durdurucu (Shizuku)", "Yalnızca mevcut desteklenen süreç komutlarını kullanır.", false),
+    ZenithFeature(ProtectionEngine.MODULE_AUTO_FREEZER, "Arka plan dondurucu (Shizuku)", "Desteklenen uygulamaları gerektiğinde dondurur.", false)
 )
 
 val privacyFeatures = listOf(
     ZenithFeature("feature_app_audit", "Uygulama izin denetimi", "Yüklü uygulamalarda görülebilen hassas izinleri listeler."),
     ZenithFeature("feature_privacy_audit", "Gizlilik risk analizi", "Uygulama izinlerini risk göstergeleri olarak puanlar."),
-    ZenithFeature("feature_sms_guard", "SMS güvenlik modülü", "Mevcut SMS modülünü açıp kapatır.", true),
-    ZenithFeature("feature_network_guard", "Ağ koruma modülü", "Mevcut ağ modülünü açıp kapatır.", false)
+    ZenithFeature(ProtectionEngine.MODULE_SMS_ANTI_PHISHING, "SMS güvenlik modülü", "Mevcut SMS modülünü açıp kapatır.", true),
+    ZenithFeature(ProtectionEngine.MODULE_NETWORK_GUARD, "Ağ koruma modülü", "Mevcut ağ modülünü açıp kapatır.", false)
 )
 
 @Composable
@@ -165,9 +167,9 @@ fun SettingsHub(
                         securityFeatures.forEach { feature ->
                             FeatureSwitch(
                                 feature = feature,
-                                checked = prefs.getBoolean(feature.key, feature.defaultEnabled),
+                                checked = readFeatureEnabled(feature, prefs, protectionEngine),
                                 onChanged = { checked ->
-                                    prefs.edit().putBoolean(feature.key, checked).apply()
+                                    writeFeatureEnabled(feature, checked, prefs, protectionEngine)
                                     onSettingsChanged()
                                 }
                             )
@@ -178,15 +180,9 @@ fun SettingsHub(
                         privacyFeatures.forEach { feature ->
                             FeatureSwitch(
                                 feature = feature,
-                                checked = prefs.getBoolean(feature.key, feature.defaultEnabled),
+                                checked = readFeatureEnabled(feature, prefs, protectionEngine),
                                 onChanged = { checked ->
-                                    prefs.edit().putBoolean(feature.key, checked).apply()
-                                    val moduleId = when (feature.key) {
-                                        "feature_sms_guard" -> ProtectionEngine.MODULE_SMS_ANTI_PHISHING
-                                        "feature_network_guard" -> ProtectionEngine.MODULE_NETWORK_GUARD
-                                        else -> null
-                                    }
-                                    if (moduleId != null) protectionEngine.setModuleEnabled(moduleId, checked)
+                                    writeFeatureEnabled(feature, checked, prefs, protectionEngine)
                                     onSettingsChanged()
                                 }
                             )
@@ -313,5 +309,49 @@ private fun FeatureSwitch(
             }
             Switch(checked = checked, onCheckedChange = onChanged)
         }
+    }
+}
+
+
+private fun readFeatureEnabled(
+    feature: ZenithFeature,
+    prefs: android.content.SharedPreferences,
+    protectionEngine: ProtectionEngine
+): Boolean {
+    val moduleIds = setOf(
+        ProtectionEngine.MODULE_REALTIME_INSTALL,
+        ProtectionEngine.MODULE_PRIVACY_SHIELD,
+        ProtectionEngine.MODULE_NETWORK_GUARD,
+        ProtectionEngine.MODULE_AUTO_FREEZER,
+        ProtectionEngine.MODULE_SMS_ANTI_PHISHING,
+        ProtectionEngine.MODULE_DEEP_APPOPS,
+        ProtectionEngine.MODULE_FORCE_STOPPER
+    )
+    return if (feature.key in moduleIds) {
+        protectionEngine.isModuleEnabled(feature.key, feature.defaultEnabled)
+    } else {
+        prefs.getBoolean(feature.key, feature.defaultEnabled)
+    }
+}
+
+private fun writeFeatureEnabled(
+    feature: ZenithFeature,
+    enabled: Boolean,
+    prefs: android.content.SharedPreferences,
+    protectionEngine: ProtectionEngine
+) {
+    val moduleIds = setOf(
+        ProtectionEngine.MODULE_REALTIME_INSTALL,
+        ProtectionEngine.MODULE_PRIVACY_SHIELD,
+        ProtectionEngine.MODULE_NETWORK_GUARD,
+        ProtectionEngine.MODULE_AUTO_FREEZER,
+        ProtectionEngine.MODULE_SMS_ANTI_PHISHING,
+        ProtectionEngine.MODULE_DEEP_APPOPS,
+        ProtectionEngine.MODULE_FORCE_STOPPER
+    )
+    if (feature.key in moduleIds) {
+        protectionEngine.setModuleEnabled(feature.key, enabled)
+    } else {
+        prefs.edit().putBoolean(feature.key, enabled).apply()
     }
 }
