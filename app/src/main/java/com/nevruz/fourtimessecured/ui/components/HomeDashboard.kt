@@ -257,13 +257,15 @@ fun HomeDashboard(
                         title = "Shizuku",
                         value = if (shizukuManager.hasShizukuPermission()) "İzinli" else "Bağlı değil",
                         modifier = Modifier.weight(1f),
-                        positive = shizukuManager.hasShizukuPermission()
+                        positive = shizukuManager.hasShizukuPermission(),
+                        themeMode = themeMode
                     )
                     SummaryTile(
                         title = "SU / Root",
                         value = "Ayarlar içinde",
                         modifier = Modifier.weight(1f),
-                        positive = false
+                        positive = false,
+                        themeMode = themeMode
                     )
                 }
             }
