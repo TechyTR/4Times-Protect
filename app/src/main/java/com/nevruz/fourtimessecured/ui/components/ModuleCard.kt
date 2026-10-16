@@ -19,9 +19,11 @@ import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Unit) {
     val mode = LocalZenithThemeMode.current
     val corner = when (mode) {
-        ZenithThemeMode.WINDOWS_XP -> 5.dp
         ZenithThemeMode.LIQUID_GLASS -> 26.dp
         ZenithThemeMode.MATERIAL_YOU -> 24.dp
+        ZenithThemeMode.AURORA -> 28.dp
+        ZenithThemeMode.SYSTEM,
+        ZenithThemeMode.LIGHT,
         ZenithThemeMode.DARK -> 20.dp
     }
     val shape = RoundedCornerShape(corner)
@@ -29,7 +31,7 @@ fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Uni
         .fillMaxWidth()
         .animateContentSize()
         .then(
-            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.WINDOWS_XP) {
+            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.AURORA) {
                 Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape)
             } else Modifier
         )
@@ -38,7 +40,7 @@ fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Uni
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = shape,
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (mode == ZenithThemeMode.WINDOWS_XP || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
+            defaultElevation = if (mode == ZenithThemeMode.AURORA || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
         ),
         modifier = cardModifier
     ) {
@@ -60,7 +62,7 @@ fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Uni
                         Spacer(modifier = Modifier.width(6.dp))
                         Surface(
                             color = MaterialTheme.colorScheme.secondaryContainer,
-                            shape = RoundedCornerShape(if (mode == ZenithThemeMode.WINDOWS_XP) 3.dp else 6.dp)
+                            shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
                                 text = "ADB",
