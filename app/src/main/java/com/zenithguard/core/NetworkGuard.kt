@@ -1,4 +1,4 @@
-package com.zenithguard.core
+package com.nevruz.fourtimessecured.core
 
 import android.content.Context
 import android.util.Log
