@@ -5,16 +5,39 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
+    <!-- Material You-inspired scalloped circle emblem -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M54,18 L82,28 L82,51 C82,70 70,84 54,91 C38,84 26,70 26,51 L26,28 Z" />
+        android:pathData="M54,12
+            C59,12 61,18 66,19
+            C71,20 76,16 80,20
+            C84,24 80,29 82,34
+            C84,39 90,41 90,46
+            C90,51 84,53 84,58
+            C84,63 90,66 90,71
+            C90,76 84,78 82,83
+            C80,88 84,93 80,97
+            C76,101 71,97 66,98
+            C61,99 59,105 54,105
+            C49,105 47,99 42,98
+            C37,97 32,101 28,97
+            C24,93 28,88 26,83
+            C24,78 18,76 18,71
+            C18,66 24,63 24,58
+            C24,53 18,51 18,46
+            C18,41 24,39 26,34
+            C28,29 24,24 28,20
+            C32,16 37,20 42,19
+            C47,18 49,12 54,12 Z" />
 
     <path
         android:fillColor="#0B0F14"
-        android:pathData="M54,29 L72,36 L72,51 C72,63 65,73 54,79 C43,73 36,63 36,51 L36,36 Z" />
+        android:pathData="M54,27
+            A27,27 0,1 0,54 81
+            A27,27 0,1 0,54 27 Z" />
 
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M50,39 L61,39 L58,51 L65,51 L49,70 L52,57 L45,57 Z" />
+        android:pathData="M50,37 L62,37 L58,50 L66,50 L48,72 L52,56 L44,56 Z" />
 
 </vector>
