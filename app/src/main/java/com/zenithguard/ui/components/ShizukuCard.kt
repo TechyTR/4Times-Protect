@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
@@ -16,11 +16,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zenithguard.core.ShizukuManager
-import com.zenithguard.ui.theme.LocalZenithThemeMode
-import com.zenithguard.ui.theme.StatusGreen
-import com.zenithguard.ui.theme.StatusWarning
-import com.zenithguard.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.ui.theme.LocalZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.StatusGreen
+import com.nevruz.fourtimessecured.ui.theme.StatusWarning
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 @Composable
 fun ShizukuCard(
