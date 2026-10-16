@@ -31,9 +31,11 @@ fun ShizukuCard(
     val context = LocalContext.current
     val mode = LocalZenithThemeMode.current
     val corner = when (mode) {
-        ZenithThemeMode.WINDOWS_XP -> 5.dp
         ZenithThemeMode.LIQUID_GLASS -> 26.dp
         ZenithThemeMode.MATERIAL_YOU -> 24.dp
+        ZenithThemeMode.AURORA -> 28.dp
+        ZenithThemeMode.SYSTEM,
+        ZenithThemeMode.LIGHT,
         ZenithThemeMode.DARK -> 20.dp
     }
     val shape = RoundedCornerShape(corner)
@@ -41,7 +43,7 @@ fun ShizukuCard(
         .fillMaxWidth()
         .animateContentSize()
         .then(
-            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.WINDOWS_XP) {
+            if (mode == ZenithThemeMode.LIQUID_GLASS || mode == ZenithThemeMode.AURORA) {
                 Modifier.border(1.dp, MaterialTheme.colorScheme.outline, shape)
             } else Modifier
         )
@@ -50,7 +52,7 @@ fun ShizukuCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = shape,
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (mode == ZenithThemeMode.WINDOWS_XP || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
+            defaultElevation = if (mode == ZenithThemeMode.AURORA || mode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 2.dp
         ),
         modifier = cardModifier
     ) {
