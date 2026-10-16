@@ -91,9 +91,14 @@ fun SettingsHub(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(visible, section) {
-        if (visible && section == "access") {
+        if (visible && section == "shizuku") {
             shizukuGranted = shizukuManager.hasShizukuPermission()
             shizukuAvailable = shizukuManager.isShizukuAvailable()
+        }
+        if (visible && section == "root" && rootStatus == "Kontrol edilmedi") {
+            rootChecking = true
+            rootStatus = withContext(Dispatchers.IO) { checkRootAccess() }
+            rootChecking = false
         }
     }
 
@@ -118,7 +123,8 @@ fun SettingsHub(
                                 "theme" -> "UI Teması"
                                 "security" -> "Güvenlik özellikleri"
                                 "privacy" -> "Gizlilik özellikleri"
-                                "access" -> "Shizuku ve SU yetkisi"
+                                "shizuku" -> "Shizuku",
+                                "root" -> "SU / Root yetkisi"
                                 else -> "Ayarlar"
                             },
                             style = MaterialTheme.typography.headlineSmall,
@@ -141,13 +147,13 @@ fun SettingsHub(
                             if (shizukuGranted) "İzin verildi" else if (shizukuAvailable) "Bağlı, izin bekleniyor" else "Bağlantı yok",
                             if (shizukuGranted) "✓" else "›",
                             statusOk = shizukuGranted
-                        ) { section = "access" }
+                        ) { section = "shizuku" }
                         SettingsMenuItem(
                             "SU yetkisi",
                             rootStatus,
                             if (rootStatus == "Root erişimi doğrulandı") "✓" else "›",
                             statusOk = rootStatus == "Root erişimi doğrulandı"
-                        ) { section = "access" }
+                        ) { section = "root" }
                     }
                     "theme" -> {
                         ZenithThemeMode.values().forEach { theme ->
@@ -189,7 +195,7 @@ fun SettingsHub(
                             )
                         }
                     }
-                    "access" -> {
+                    "shizuku" -> {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -197,9 +203,9 @@ fun SettingsHub(
                                     Text(if (shizukuGranted) "✓ İzin verildi" else "○ İzin yok", color = if (shizukuGranted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                                 Text(
-                                    if (shizukuGranted) "İzin zaten mevcut; tekrar yönlendirme yapılmadı."
-                                    else if (shizukuAvailable) "İzin penceresini açmak için aşağıya dokun."
-                                    else "Önce Shizuku uygulamasını başlatıp servisini etkinleştir.",
+                                    if (shizukuGranted) "İzin zaten mevcut; yeniden yönlendirme yapılmadı."
+                                    else if (shizukuAvailable) "Shizuku servisi hazır. Uygulama iznini iste."
+                                    else "Önce Shizuku uygulamasını açıp servisini etkinleştir.",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                                 Button(
@@ -217,39 +223,26 @@ fun SettingsHub(
                                 ) { Text(if (shizukuGranted) "İzin verildi ✓" else "Shizuku'yu aç / izin iste") }
                             }
                         }
+                    }
+                    "root" -> {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text("SU / Root", modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
-                                    Text(if (rootStatus == "Root erişimi doğrulandı") "✓" else rootStatus)
+                                    Text(if (rootStatus == "Root erişimi doğrulandı") "✓ Root erişimi var" else rootStatus)
                                 }
-                                Text("Yalnızca erişimi doğrulamak için 'su -c id' komutu denenir; root yoksa yetki verildiği varsayılmaz.", style = MaterialTheme.typography.bodySmall)
+                                Text("Erişim yalnızca 'su -c id' ile doğrulanır. Root izni yoksa uygulama bunu varmış gibi göstermez.", style = MaterialTheme.typography.bodySmall)
                                 Button(
-                                    enabled = !rootChecking,
+                                    enabled = !rootChecking && rootStatus != "Root erişimi doğrulandı",
                                     onClick = {
-                                        if (rootStatus == "Root erişimi doğrulandı") return@Button
                                         rootChecking = true
                                         scope.launch {
-                                            rootStatus = withContext(Dispatchers.IO) {
-                                                try {
-                                                    val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "id"))
-                                                    val finished = process.waitFor(3, TimeUnit.SECONDS)
-                                                    if (!finished) {
-                                                        process.destroy()
-                                                        "Yanıt alınamadı"
-                                                    } else {
-                                                        val output = process.inputStream.bufferedReader().use { it.readText() }
-                                                        if (process.exitValue() == 0 && output.contains("uid=0")) "Root erişimi doğrulandı" else "Root erişimi yok"
-                                                    }
-                                                } catch (_: Exception) {
-                                                    "Root erişimi yok"
-                                                }
-                                            }
+                                            rootStatus = withContext(Dispatchers.IO) { checkRootAccess() }
                                             rootChecking = false
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth()
-                                ) { Text(if (rootChecking) "Kontrol ediliyor…" else if (rootStatus == "Root erişimi doğrulandı") "Root aktif ✓" else "SU yetkisini kontrol et") }
+                                ) { Text(if (rootChecking) "Kontrol ediliyor…" else if (rootStatus == "Root erişimi doğrulandı") "Root aktif ✓" else "SU yetkisini tekrar kontrol et") }
                             }
                         }
                     }
@@ -354,5 +347,22 @@ private fun writeFeatureEnabled(
         protectionEngine.setModuleEnabled(feature.key, enabled)
     } else {
         prefs.edit().putBoolean(feature.key, enabled).apply()
+    }
+}
+
+
+private fun checkRootAccess(): String {
+    return try {
+        val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "id"))
+        val finished = process.waitFor(3, TimeUnit.SECONDS)
+        if (!finished) {
+            process.destroy()
+            "Yanıt alınamadı"
+        } else {
+            val output = process.inputStream.bufferedReader().use { it.readText() }
+            if (process.exitValue() == 0 && output.contains("uid=0")) "Root erişimi doğrulandı" else "Root erişimi yok"
+        }
+    } catch (_: Exception) {
+        "Root erişimi yok"
     }
 }
