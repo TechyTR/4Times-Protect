@@ -1,4 +1,4 @@
-package com.zenithguard.security
+package com.nevruz.fourtimessecured.security
 
 import android.content.ContentResolver
 import android.net.Uri
