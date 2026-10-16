@@ -54,6 +54,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun QuickScanFlow(
     enabled: Boolean,
+    saveHistory: Boolean = true,
     onStatusChanged: (String, String) -> Unit
 ) {
     val context = LocalContext.current
@@ -85,7 +86,7 @@ fun QuickScanFlow(
                         FileScanner.scanSelectedDocument(context, uri, MalwareHashDatabase.snapshot())
                     }
                     result = scan
-                    ScanHistoryStore(context).add(scan)
+                    if (saveHistory) ScanHistoryStore(context).add(scan)
                     resultFindings = FileRiskAnalyzer.analyze(scan.name, scan.sha256)
                     val knownBad = scan.status == ScanStatus.KNOWN_MALWARE ||
                         resultFindings.any { it.level == FileRiskLevel.HIGH }
