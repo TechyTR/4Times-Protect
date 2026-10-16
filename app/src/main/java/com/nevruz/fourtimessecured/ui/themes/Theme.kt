@@ -117,7 +117,25 @@ fun ZenithGuardTheme(
         )
     }
 
-    val typography = Typography(defaultFontFamily = fontForTheme(themeMode))
+    val fontFamily = fontForTheme(themeMode)
+    val baseTypography = Typography()
+    val typography = baseTypography.copy(
+        displayLarge = baseTypography.displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = baseTypography.displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = baseTypography.displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = baseTypography.headlineLarge.copy(fontFamily = fontFamily),
+        headlineMedium = baseTypography.headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = baseTypography.headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = baseTypography.titleLarge.copy(fontFamily = fontFamily),
+        titleMedium = baseTypography.titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = baseTypography.titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = baseTypography.bodyLarge.copy(fontFamily = fontFamily),
+        bodyMedium = baseTypography.bodyMedium.copy(fontFamily = fontFamily),
+        bodySmall = baseTypography.bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = baseTypography.labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = baseTypography.labelMedium.copy(fontFamily = fontFamily),
+        labelSmall = baseTypography.labelSmall.copy(fontFamily = fontFamily)
+    )
 
     CompositionLocalProvider(LocalZenithThemeMode provides themeMode) {
         MaterialTheme(
