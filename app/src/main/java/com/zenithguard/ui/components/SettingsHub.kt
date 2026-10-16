@@ -65,6 +65,7 @@ val securityFeatures = listOf(
 val privacyFeatures = listOf(
     ZenithFeature("feature_app_audit", "Uygulama izin denetimi", "Yüklü uygulamalarda görülebilen hassas izinleri listeler."),
     ZenithFeature("feature_privacy_audit", "Gizlilik risk analizi", "Uygulama izinlerini risk göstergeleri olarak puanlar."),
+    ZenithFeature(ProtectionEngine.MODULE_PRIVACY_SHIELD, "Kamera ve mikrofon bekçisi", "Gizlilik modülünün mevcut durumunu açıp kapatır.", true),
     ZenithFeature(ProtectionEngine.MODULE_SMS_ANTI_PHISHING, "SMS güvenlik modülü", "Mevcut SMS modülünü açıp kapatır.", true),
     ZenithFeature(ProtectionEngine.MODULE_NETWORK_GUARD, "Ağ koruma modülü", "Mevcut ağ modülünü açıp kapatır.", false)
 )
@@ -174,7 +175,7 @@ fun SettingsHub(
                                 }
                             )
                         }
-                        Text("Alttaki gelişmiş modüllerin kendi anahtarları da mevcut modül ayarlarından yönetilir.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Shizuku gerektiren modüller, izin ve destek durumuna bağlıdır.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     "privacy" -> {
                         privacyFeatures.forEach { feature ->
