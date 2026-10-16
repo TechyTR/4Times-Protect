@@ -11,66 +11,64 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zenithguard.core.ProtectionModule
-import com.zenithguard.ui.theme.AccentCyan
-import com.zenithguard.ui.theme.AccentPurple
-import com.zenithguard.ui.theme.CardSurface
 
 @Composable
 fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Unit) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = CardSurface),
-        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = module.title,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
                     if (module.requiresShizuku) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Surface(
-                            color = AccentPurple.copy(alpha = 0.2f),
-                            shape = RoundedCornerShape(4.dp)
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
                                 text = "ADB",
-                                color = AccentPurple,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
                             )
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = module.description,
-                    color = Color.Gray,
-                    fontSize = 11.sp,
-                    lineHeight = 15.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 12.sp,
+                    lineHeight = 17.sp
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             Switch(
                 checked = module.isEnabled,
-                onCheckedChange = { onToggleChanged(it) },
+                onCheckedChange = onToggleChanged,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.Black,
-                    checkedTrackColor = AccentCyan,
-                    uncheckedThumbColor = Color.Gray,
-                    uncheckedTrackColor = Color(0xFF21262D)
+                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             )
         }
