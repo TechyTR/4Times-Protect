@@ -23,9 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nevruz.fourtimessecured.core.AccessLevel
 import com.nevruz.fourtimessecured.core.AdvancedAccessRepository
-import com.nevruz.fourtimessecured.core.AdvancedAccessStatus
 import com.nevruz.fourtimessecured.core.RootCheckResult
 import com.nevruz.fourtimessecured.core.RootManager
 import com.nevruz.fourtimessecured.core.RootStatus
@@ -127,12 +125,12 @@ fun AdvancedAccessCard(
                                 }
                             }
 
-                            repeat(10) {
+                            for (attempt in 0 until 10) {
                                 kotlinx.coroutines.delay(500)
                                 accessStatus = repository.readStatus()
 
                                 if (accessStatus.shizukuPermissionGranted) {
-                                    return@repeat
+                                    break
                                 }
                             }
                         } finally {
