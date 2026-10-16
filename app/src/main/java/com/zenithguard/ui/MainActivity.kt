@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.item
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.zenithguard.core.ProtectionEngine
 import com.zenithguard.core.ShizukuManager
 import com.zenithguard.ui.components.HeaderBanner
 import com.zenithguard.ui.components.ModuleToggleCard
+import com.zenithguard.ui.components.PrivacyAuditCard
 import com.zenithguard.ui.components.ShizukuCard
 import com.zenithguard.ui.theme.DarkBackground
 import com.zenithguard.ui.theme.ZenithGuardTheme
@@ -51,12 +53,10 @@ fun DashboardScreen(shizukuManager: ShizukuManager, protectionEngine: Protection
             .background(DarkBackground)
             .padding(16.dp)
     ) {
-        // 1. OriginOS / HarmonyOS Inspired OS Banner
         HeaderBanner()
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 2. Shizuku ADB Control Card
         ShizukuCard(
             isShizukuActive = isShizukuActive,
             shizukuManager = shizukuManager,
@@ -78,11 +78,13 @@ fun DashboardScreen(shizukuManager: ShizukuManager, protectionEngine: Protection
             modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
         )
 
-        // 3. Modular Protection Toggles
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize()
         ) {
+            item {
+                PrivacyAuditCard()
+            }
             items(modules) { module ->
                 ModuleToggleCard(
                     module = module,
