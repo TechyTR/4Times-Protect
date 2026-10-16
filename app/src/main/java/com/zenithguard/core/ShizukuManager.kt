@@ -1,4 +1,4 @@
-package com.zenithguard.core
+package com.nevruz.fourtimessecured.core
 
 import android.content.ComponentName
 import android.content.Context
@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import android.os.IBinder
 import android.util.Log
 import rikka.shizuku.Shizuku
-import com.zenithguard.shizuku.IZenithUserService
+import com.nevruz.fourtimessecured.shizuku.IZenithUserService
 
 class ShizukuManager(
     private val context: Context
@@ -122,7 +122,7 @@ class ShizukuManager(
             val args = Shizuku.UserServiceArgs(
                 ComponentName(
                     context,
-                    com.zenithguard.shizuku.ZenithUserService::class.java
+                    com.nevruz.fourtimessecured.shizuku.ZenithUserService::class.java
                 )
             )
                 .daemon(true)
@@ -190,7 +190,7 @@ class ShizukuManager(
             val args = Shizuku.UserServiceArgs(
                 ComponentName(
                     context,
-                    com.zenithguard.shizuku.ZenithUserService::class.java
+                    com.nevruz.fourtimessecured.shizuku.ZenithUserService::class.java
                 )
             )
                 .daemon(true)
