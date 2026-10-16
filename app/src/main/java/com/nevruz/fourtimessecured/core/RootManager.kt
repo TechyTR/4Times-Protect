@@ -1,11 +1,10 @@
 package com.nevruz.fourtimessecured.core
 
 import android.util.Log
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 enum class RootStatus {
+    NOT_CHECKED,
     GRANTED,
     DENIED,
     UNAVAILABLE,
@@ -56,7 +55,7 @@ class RootManager {
 
             val output = process.inputStream
                 .bufferedReader()
-                .use(BufferedReader::readText)
+                .use { it.readText() }
                 .trim()
 
             val errorOutput = process.errorStream
