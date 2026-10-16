@@ -60,7 +60,7 @@ class RootManager {
 
             val errorOutput = process.errorStream
                 .bufferedReader()
-                .use(BufferedReader::readText)
+                .use { it.readText() }
                 .trim()
 
             if (process.exitValue() != 0) {
