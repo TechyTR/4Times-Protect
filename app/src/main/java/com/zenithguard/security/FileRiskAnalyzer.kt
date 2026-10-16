@@ -11,26 +11,23 @@ data class FileRiskFinding(
     val explanation: String
 )
 
-/**
- * Heuristic triage only. File names/extensions are not proof of malware.
- * This class does not execute or modify the inspected file.
- */
+/** Heuristic triage only. File names/extensions are not proof of malware. */
 object FileRiskAnalyzer {
     private val executableLikeExtensions = setOf(
         "apk", "dex", "jar", "so", "sh", "elf", "exe", "dll", "bat", "cmd", "ps1"
     )
+    private val documentExtensions = setOf(
+        "pdf", "jpg", "jpeg", "png", "mp3", "mp4", "doc", "docx"
+    )
 
     fun analyze(fileName: String, sha256: String = ""): List<FileRiskFinding> {
         val findings = mutableListOf<FileRiskFinding>()
-        val lower = fileName.lowercase(Locale.ROOT)
-        val parts = lower.split('.').filter { it.isNotBlank() }
+        val parts = fileName.lowercase(Locale.ROOT).split('.').filter { it.isNotBlank() }
 
         if (parts.size >= 3) {
             val penultimate = parts[parts.lastIndex - 1]
             val last = parts.last()
-            if (penultimate in setOf("pdf", "jpg", "jpeg", "png", "mp3", "mp4", "doc", "docx") &&
-                last in executableLikeExtensions
-            ) {
+            if (penultimate in documentExtensions && last in executableLikeExtensions) {
                 findings += FileRiskFinding(
                     FileRiskLevel.REVIEW,
                     "Çift uzantılı dosya",
@@ -39,7 +36,7 @@ object FileRiskAnalyzer {
             }
         }
 
-        if (parts.lastOrNull() in executableLikeExtensions) {
+        if (parts.lastOrNull()?.let(executableLikeExtensions::contains) == true) {
             findings += FileRiskFinding(
                 FileRiskLevel.INFO,
                 "Çalıştırılabilir dosya türü",
@@ -62,7 +59,6 @@ object FileRiskAnalyzer {
                 "Bu sonuç dosyanın güvenli olduğunu kanıtlamaz; içerik tabanlı analiz ve güncel imzalar gerekir."
             )
         }
-
         return findings
     }
 
