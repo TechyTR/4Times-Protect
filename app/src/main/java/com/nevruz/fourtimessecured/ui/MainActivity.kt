@@ -3,10 +3,12 @@ package com.nevruz.fourtimessecured.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import com.nevruz.fourtimessecured.core.ProtectionEngine
 import com.nevruz.fourtimessecured.core.ShizukuManager
 import com.nevruz.fourtimessecured.ui.components.HomeDashboard
@@ -31,20 +33,30 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
+            var showSplash by remember { mutableStateOf(true) }
+
+            LaunchedEffect(Unit) {
+                delay(1600)
+                showSplash = false
+            }
 
             ZenithGuardTheme(themeMode = selectedTheme) {
-                HomeDashboard(
-                    shizukuManager = shizukuManager,
-                    protectionEngine = protectionEngine,
-                    themeMode = selectedTheme,
-                    onThemeSelected = { theme ->
-                        selectedTheme = theme
-                        getSharedPreferences("zenith_settings", MODE_PRIVATE)
-                            .edit()
-                            .putString("theme_mode", theme.name)
-                            .apply()
-                    }
-                )
+                if (showSplash) {
+                    FourTimesShapeMorphSplash()
+                } else {
+                    HomeDashboard(
+                        shizukuManager = shizukuManager,
+                        protectionEngine = protectionEngine,
+                        themeMode = selectedTheme,
+                        onThemeSelected = { theme ->
+                            selectedTheme = theme
+                            getSharedPreferences("zenith_settings", MODE_PRIVATE)
+                                .edit()
+                                .putString("theme_mode", theme.name)
+                                .apply()
+                        }
+                    )
+                }
             }
         }
     }
