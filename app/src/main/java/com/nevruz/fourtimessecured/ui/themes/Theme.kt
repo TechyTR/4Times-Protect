@@ -1,12 +1,15 @@
 package com.nevruz.fourtimessecured.ui.theme
 
+import android.graphics.Typeface
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 
 enum class ZenithThemeMode(val title: String, val description: String) {
     DARK("Zenith Dark", "Grafit yüzeyler ve zümrüt vurgular"),
@@ -30,6 +33,20 @@ val AccentCyan = Emerald
 val AccentPurple = Color(0xFF8B7CFF)
 val StatusGreen = Color(0xFF34D399)
 val StatusWarning = Color(0xFFFBBF24)
+
+/**
+ * Uses the requested typeface when the Android device has it installed.
+ * Android falls back to its default sans-serif when a named font is unavailable.
+ */
+private fun fontForTheme(themeMode: ZenithThemeMode): FontFamily {
+    val familyName = when (themeMode) {
+        ZenithThemeMode.MATERIAL_YOU -> "Google Sans Flex"
+        ZenithThemeMode.LIQUID_GLASS -> "SF Pro Display"
+        ZenithThemeMode.DARK,
+        ZenithThemeMode.WINDOWS_XP -> "SamsungOne"
+    }
+    return FontFamily(Typeface.create(familyName, Typeface.NORMAL))
+}
 
 @Composable
 fun ZenithGuardTheme(
@@ -91,9 +108,12 @@ fun ZenithGuardTheme(
         )
     }
 
+    val typography = Typography(defaultFontFamily = fontForTheme(themeMode))
+
     CompositionLocalProvider(LocalZenithThemeMode provides themeMode) {
         MaterialTheme(
             colorScheme = colors,
+            typography = typography,
             content = content
         )
     }
