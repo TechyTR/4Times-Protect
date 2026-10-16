@@ -1,4 +1,4 @@
-package com.zenithguard.core
+package com.nevruz.fourtimessecured.core
 
 import android.util.Log
 import java.io.BufferedReader
