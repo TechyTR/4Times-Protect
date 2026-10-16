@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zenithguard.core.ProtectionModule
-import com.zenithguard.ui.theme.LocalZenithThemeMode
-import com.zenithguard.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.core.ProtectionModule
+import com.nevruz.fourtimessecured.ui.theme.LocalZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 @Composable
 fun ModuleToggleCard(module: ProtectionModule, onToggleChanged: (Boolean) -> Unit) {
