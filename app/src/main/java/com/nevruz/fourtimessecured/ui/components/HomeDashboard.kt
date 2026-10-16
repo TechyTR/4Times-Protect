@@ -323,9 +323,21 @@ private fun SummaryTile(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
-    positive: Boolean
+    positive: Boolean,
+    themeMode: ZenithThemeMode
 ) {
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier.animateContentSize(tween(300)).border(
+            width = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 1.dp else 0.dp,
+            color = if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0x6689B6C9) else Color.Transparent,
+            shape = RoundedCornerShape(22.dp)
+        ),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (themeMode == ZenithThemeMode.LIQUID_GLASS) Color(0xA91A2B3B) else MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (themeMode == ZenithThemeMode.LIQUID_GLASS) 0.dp else 3.dp)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
