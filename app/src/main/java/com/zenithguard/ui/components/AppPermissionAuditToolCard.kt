@@ -1,5 +1,5 @@
 
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.zenithguard.security.AppPermissionAuditor
-import com.zenithguard.security.AppPermissionReport
+import com.nevruz.fourtimessecured.security.AppPermissionAuditor
+import com.nevruz.fourtimessecured.security.AppPermissionReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
