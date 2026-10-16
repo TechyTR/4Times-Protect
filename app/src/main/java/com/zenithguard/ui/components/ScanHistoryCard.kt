@@ -1,5 +1,5 @@
 
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.zenithguard.security.ScanHistoryEntry
-import com.zenithguard.security.ScanHistoryStore
+import com.nevruz.fourtimessecured.security.ScanHistoryEntry
+import com.nevruz.fourtimessecured.security.ScanHistoryStore
 import java.text.DateFormat
 import java.util.Date
 
