@@ -1,4 +1,4 @@
-package com.zenithguard.ui
+package com.nevruz.fourtimessecured.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,11 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.zenithguard.core.ProtectionEngine
-import com.zenithguard.core.ShizukuManager
-import com.zenithguard.ui.components.HomeDashboard
-import com.zenithguard.ui.theme.ZenithGuardTheme
-import com.zenithguard.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.core.ProtectionEngine
+import com.nevruz.fourtimessecured.core.ShizukuManager
+import com.nevruz.fourtimessecured.ui.components.HomeDashboard
+import com.nevruz.fourtimessecured.ui.theme.ZenithGuardTheme
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
 
 class MainActivity : ComponentActivity() {
     private lateinit var shizukuManager: ShizukuManager
