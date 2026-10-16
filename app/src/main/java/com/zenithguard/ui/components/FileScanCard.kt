@@ -1,5 +1,5 @@
 
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import android.content.Context
 import android.net.Uri
@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.work.*
-import com.zenithguard.security.*
+import com.nevruz.fourtimessecured.security.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
