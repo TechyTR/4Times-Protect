@@ -1,4 +1,4 @@
-package com.zenithguard.shizuku
+package com.nevruz.fourtimessecured.shizuku
 
 class ZenithUserService : IZenithUserService.Stub() {
 
