@@ -2,36 +2,48 @@ package com.zenithguard.ui.theme
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 /**
- * OriginOS / HarmonyOS / OneUI style ultra-smooth animated gradient brush.
+ * A slow, theme-aware gradient for the main version banner.
+ * The emerald palette is used by default; Windows XP keeps its classic blue accent.
  */
 @Composable
 fun rememberAnimatedOSGradient(): Brush {
-    val infiniteTransition = rememberInfiniteTransition(label = "os_fluid_gradient")
+    val scheme = MaterialTheme.colorScheme
+    val transition = rememberInfiniteTransition(label = "zenith_banner_gradient")
 
-    val color1 by infiniteTransition.animateColor(
-        initialValue = Color(0xFF0F172A),
-        targetValue = Color(0xFF0284C7),
-        animationSpec = infiniteRepeatable(tween(6000, easing = LinearEasing), RepeatMode.Reverse),
-        label = "color1"
+    val first by transition.animateColor(
+        initialValue = scheme.primary.copy(alpha = 0.96f),
+        targetValue = scheme.secondary.copy(alpha = 0.88f),
+        animationSpec = infiniteRepeatable(
+            animation = tween(5200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "banner_first"
     )
-    val color2 by infiniteTransition.animateColor(
-        initialValue = Color(0xFF311B92),
-        targetValue = Color(0xFF0D9488),
-        animationSpec = infiniteRepeatable(tween(8000, easing = LinearEasing), RepeatMode.Reverse),
-        label = "color2"
+    val second by transition.animateColor(
+        initialValue = scheme.background,
+        targetValue = scheme.primary.copy(alpha = 0.40f),
+        animationSpec = infiniteRepeatable(
+            animation = tween(6800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "banner_second"
     )
-    val color3 by infiniteTransition.animateColor(
-        initialValue = Color(0xFF020617),
-        targetValue = Color(0xFF1E1B4B),
-        animationSpec = infiniteRepeatable(tween(7000, easing = LinearEasing), RepeatMode.Reverse),
-        label = "color3"
+    val third by transition.animateColor(
+        initialValue = scheme.secondary.copy(alpha = 0.72f),
+        targetValue = scheme.primary.copy(alpha = 0.70f),
+        animationSpec = infiniteRepeatable(
+            animation = tween(6000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "banner_third"
     )
 
-    return Brush.verticalGradient(colors = listOf(color1, color2, color3))
+    return Brush.linearGradient(colors = listOf(first, second, third))
 }
