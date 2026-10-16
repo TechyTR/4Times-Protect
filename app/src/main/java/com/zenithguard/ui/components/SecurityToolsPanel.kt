@@ -1,5 +1,5 @@
 
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
