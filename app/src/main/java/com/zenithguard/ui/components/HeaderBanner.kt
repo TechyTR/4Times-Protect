@@ -1,4 +1,4 @@
-package com.zenithguard.ui.components
+package com.nevruz.fourtimessecured.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zenithguard.ui.theme.LocalZenithThemeMode
-import com.zenithguard.ui.theme.ZenithThemeMode
-import com.zenithguard.ui.theme.rememberAnimatedOSGradient
+import com.nevruz.fourtimessecured.ui.theme.LocalZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.ZenithThemeMode
+import com.nevruz.fourtimessecured.ui.theme.rememberAnimatedOSGradient
 
 @Composable
 fun HeaderBanner() {
