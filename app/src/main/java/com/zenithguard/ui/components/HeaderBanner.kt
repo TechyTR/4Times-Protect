@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +52,7 @@ fun HeaderBanner() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Surface(
                 color = Color.White.copy(alpha = 0.16f),
-                shape = RoundedCornerShape(if (themeMode == ZenithThemeMode.WINDOWS_XP) 3.dp else 50)
+                shape = RoundedCornerShape(if (themeMode == ZenithThemeMode.WINDOWS_XP) 3.dp else 50.dp)
             ) {
                 Text(
                     text = "SİSTEM GÜVENLİ VE GÜNCEL",
