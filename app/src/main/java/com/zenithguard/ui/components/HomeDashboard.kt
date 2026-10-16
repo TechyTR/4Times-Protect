@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,9 +50,9 @@ fun HomeDashboard(
 ) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("zenith_dashboard", Context.MODE_PRIVATE) }
-    var status by remember { mutableStateOf(prefs.getString("status", "RISK") ?: "RISK") }
+    var status by remember { mutableStateOf((prefs.getString("status", "RISK") ?: "RISK").let { if (it == "SCANNING") "RISK" else it }) }
     var statusDetail by remember {
-        mutableStateOf(prefs.getString("status_detail", "Henüz dosya taraması yapılmadı.") ?: "Henüz dosya taraması yapılmadı.")
+        mutableStateOf(if (prefs.getString("status", "RISK") == "SCANNING") "Önceki tarama tamamlanmadan kapanmış." else (prefs.getString("status_detail", "Henüz dosya taraması yapılmadı.") ?: "Henüz dosya taraması yapılmadı."))
     }
     var settingsVisible by remember { mutableStateOf(false) }
     var refreshKey by remember { mutableStateOf(0) }
