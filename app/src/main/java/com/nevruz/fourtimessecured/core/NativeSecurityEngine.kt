@@ -2,64 +2,72 @@ package com.nevruz.fourtimessecured.core
 
 import android.content.Context
 import android.util.Log
+import java.io.FileDescriptor
 
 /**
- * Zenith Guard native security engine facade.
- *
- * Native/NDK engine hazır olduğunda JNI çağrıları burada toplanabilir.
- * Şimdilik Kotlin güvenlik katmanına güvenli bir facade sağlar.
+ * JNI facade for heuristic file-header inspection. This does not prove a file
+ * safe or malicious. File access and permission decisions remain in Android.
  */
-class NativeSecurityEngine(
-    private val context: Context
-) {
-
+class NativeSecurityEngine(@Suppress("unused") private val context: Context? = null) {
     companion object {
-        private const val TAG = "ZenithNativeEngine"
-    }
+        private const val TAG = "FourTimesNativeEngine"
+        private const val FLAG_ELF = 1 shl 0
+        private const val FLAG_PE = 1 shl 1
+        private const val FLAG_DEX = 1 shl 2
+        private const val FLAG_ZIP = 1 shl 3
+        private const val FLAG_SCRIPT = 1 shl 4
+        private const val FLAG_EXTENSION_MISMATCH = 1 shl 5
+        private const val FLAG_EMPTY = 1 shl 6
 
-    private var initialized = false
-
-    fun initialize(): Boolean {
-        return try {
-            initialized = true
-            Log.i(TAG, "Native security engine initialized")
+        private val libraryLoaded: Boolean = try {
+            System.loadLibrary("fourtimes_security")
             true
-        } catch (e: Exception) {
-            initialized = false
-            Log.e(TAG, "Native security engine initialization failed", e)
+        } catch (error: UnsatisfiedLinkError) {
+            Log.e(TAG, "Native library could not be loaded", error)
+            false
+        } catch (error: SecurityException) {
+            Log.e(TAG, "Native library load was blocked", error)
             false
         }
     }
 
-    fun isInitialized(): Boolean {
-        return initialized
-    }
+    private external fun nativeInspectFileDescriptor(fileDescriptor: FileDescriptor, displayName: String): Int
+    fun initialize(): Boolean = libraryLoaded
+    fun isInitialized(): Boolean = libraryLoaded
 
-    /**
-     * Native engine'in güvenlik taramasını başlatmak için giriş noktası.
-     *
-     * Gerçek C++/JNI motoru eklendiğinde nativeScan() burada çağrılabilir.
-     */
-    fun performSecurityScan(): SecurityScanResult {
-        if (!initialized) {
-            initialize()
+    fun inspectFileDescriptor(fileDescriptor: FileDescriptor, displayName: String): NativeFileInspection {
+        if (!libraryLoaded) return NativeFileInspection(false, 0, emptyList(), "Yerel güvenlik kütüphanesi yüklenemedi.")
+        return try {
+            val flags = nativeInspectFileDescriptor(fileDescriptor, displayName)
+            if (flags < 0) {
+                NativeFileInspection(false, 0, emptyList(), "Dosya başlığı yerel olarak okunamadı.")
+            } else {
+                val indicators = buildList {
+                    if (flags and FLAG_ELF != 0) add("ELF yürütülebilir dosya başlığı")
+                    if (flags and FLAG_PE != 0) add("Windows PE/MZ yürütülebilir dosya başlığı")
+                    if (flags and FLAG_DEX != 0) add("Android DEX bytecode başlığı")
+                    if (flags and FLAG_ZIP != 0) add("ZIP kapsayıcı imzası")
+                    if (flags and FLAG_SCRIPT != 0) add("Script/shebang başlığı")
+                    if (flags and FLAG_EXTENSION_MISMATCH != 0) add("Dosya uzantısı ile yürütülebilir başlık uyuşmuyor")
+                    if (flags and FLAG_EMPTY != 0) add("Boş dosya")
+                }
+                NativeFileInspection(true, flags, indicators)
+            }
+        } catch (error: Exception) {
+            Log.w(TAG, "Native file inspection failed", error)
+            NativeFileInspection(false, 0, emptyList(), error.message ?: "Yerel analiz başarısız.")
+        } catch (error: UnsatisfiedLinkError) {
+            Log.e(TAG, "Native inspection entry point unavailable", error)
+            NativeFileInspection(false, 0, emptyList(), "Yerel analiz işlevi kullanılamıyor.")
         }
-
-        return SecurityScanResult(
-            success = true,
-            threatsDetected = 0,
-            message = "Native güvenlik motoru hazır."
-        )
     }
 
-    fun shutdown() {
-        initialized = false
-        Log.i(TAG, "Native security engine stopped")
-    }
-
-    data class SecurityScanResult(
-        val success: Boolean,
-        val threatsDetected: Int,
-        val message: String
-    )
+    fun shutdown() = Unit
 }
+
+data class NativeFileInspection(
+    val available: Boolean,
+    val flags: Int,
+    val indicators: List<String>,
+    val error: String? = null
+)
