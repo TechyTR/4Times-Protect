@@ -2,26 +2,89 @@ package com.zenithguard.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Zenith Guard Premium Cyber Dark Palette
-val DarkBackground = Color(0xFF0B0F17)
-val CardSurface = Color(0xFF161B22)
-val AccentCyan = Color(0xFF38BDF8)
-val AccentPurple = Color(0xFFA855F7)
-val StatusGreen = Color(0xFF10B981)
-val StatusWarning = Color(0xFFF59E0B)
+enum class ZenithThemeMode(val title: String, val description: String) {
+    DARK("Zenith Dark", "Grafit yüzeyler ve zümrüt vurgular"),
+    LIQUID_GLASS("Liquid Glass", "Yarı saydam cam katmanları"),
+    MATERIAL_YOU("Material You", "Android'e özgü yumuşak yüzeyler"),
+    WINDOWS_XP("Windows XP Classic", "Klasik mavi pencere görünümü");
+
+    companion object {
+        fun fromName(name: String?): ZenithThemeMode =
+            entries.firstOrNull { it.name == name } ?: DARK
+    }
+}
+
+val Emerald = Color(0xFF10B981)
+val EmeraldLight = Color(0xFF6EE7B7)
+val DarkBackground = Color(0xFF090D12)
+val CardSurface = Color(0xFF151C22)
+val AccentCyan = Emerald
+val AccentPurple = Color(0xFF8B7CFF)
+val StatusGreen = Color(0xFF34D399)
+val StatusWarning = Color(0xFFFBBF24)
 
 @Composable
-fun ZenithGuardTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = darkColorScheme(
+fun ZenithGuardTheme(
+    themeMode: ZenithThemeMode = ZenithThemeMode.DARK,
+    content: @Composable () -> Unit
+) {
+    val colors = when (themeMode) {
+        ZenithThemeMode.DARK -> darkColorScheme(
+            primary = Emerald,
+            onPrimary = Color(0xFF032018),
+            secondary = EmeraldLight,
             background = DarkBackground,
+            onBackground = Color(0xFFE8F2ED),
             surface = CardSurface,
-            primary = AccentCyan,
-            secondary = AccentPurple
-        ),
+            onSurface = Color(0xFFE8F2ED),
+            surfaceVariant = Color(0xFF202A31),
+            onSurfaceVariant = Color(0xFFB3C2BA),
+            outline = Color(0xFF34433C)
+        )
+        ZenithThemeMode.LIQUID_GLASS -> darkColorScheme(
+            primary = EmeraldLight,
+            onPrimary = Color(0xFF06271C),
+            secondary = Color(0xFF8ADBC1),
+            background = Color(0xFF08111A),
+            onBackground = Color(0xFFF0FBF7),
+            surface = Color(0xB81D2A32),
+            onSurface = Color(0xFFF0FBF7),
+            surfaceVariant = Color(0x992C4147),
+            onSurfaceVariant = Color(0xFFD0E3DC),
+            outline = Color(0x6687B5A4)
+        )
+        ZenithThemeMode.MATERIAL_YOU -> darkColorScheme(
+            primary = Emerald,
+            onPrimary = Color(0xFF002116),
+            secondary = Color(0xFFB2DCCB),
+            background = Color(0xFF101512),
+            onBackground = Color(0xFFE2E9E2),
+            surface = Color(0xFF191F1B),
+            onSurface = Color(0xFFE2E9E2),
+            surfaceVariant = Color(0xFF29332D),
+            onSurfaceVariant = Color(0xFFC0CCC3),
+            outline = Color(0xFF46534A)
+        )
+        ZenithThemeMode.WINDOWS_XP -> lightColorScheme(
+            primary = Color(0xFF1769C2),
+            onPrimary = Color.White,
+            secondary = Color(0xFF2D8B57),
+            background = Color(0xFFE8F0F8),
+            onBackground = Color(0xFF182A3A),
+            surface = Color(0xFFF8FBFF),
+            onSurface = Color(0xFF182A3A),
+            surfaceVariant = Color(0xFFD7E5F4),
+            onSurfaceVariant = Color(0xFF344E67),
+            outline = Color(0xFF8DAAC6)
+        )
+    }
+
+    MaterialTheme(
+        colorScheme = colors,
         content = content
     )
 }
