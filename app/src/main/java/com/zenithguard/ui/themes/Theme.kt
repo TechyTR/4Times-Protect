@@ -77,9 +77,9 @@ fun ZenithGuardTheme(
             outline = Color(0xFF46534A)
         )
         ZenithThemeMode.WINDOWS_XP -> lightColorScheme(
-            primary = Color(0xFF1769C2),
-            onPrimary = Color.White,
-            secondary = Color(0xFF2D8B57),
+            primary = Emerald,
+            onPrimary = Color(0xFF032018),
+            secondary = Color(0xFF1769C2),
             onSecondary = Color.White,
             background = Color(0xFFE8F0F8),
             onBackground = Color(0xFF182A3A),
